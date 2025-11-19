@@ -1,0 +1,22 @@
+import express from 'express'
+import cors from 'cors'
+import dotenv from 'dotenv'
+
+import authRoutes from './modules/auth/auth.routes'
+import userRoutes from './modules/user/user.route'
+dotenv.config()
+
+
+const app = express()
+
+app.use(cors())
+app.use(express.json())
+
+app.get('/health',(req,res)=>{
+    res.json({status:'OK',message:'Server Running'})
+})
+
+app.use('/api/auth',authRoutes)
+app.use('/api/user',userRoutes)
+
+export default app
