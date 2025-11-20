@@ -1,5 +1,5 @@
 import UserModel from "./auth.model";
-import { IUser } from "./auth.interface";
+import {RegisterDto} from './auth.dto'
 import bcrypt from "bcryptjs";
 import OtpService from "./otp.service";
 import generateToken from "../../utils/generateToken";
@@ -8,7 +8,7 @@ import generateToken from "../../utils/generateToken";
 const otpService = new OtpService()
 
 export default class AuthService {
-  async requestRegisterOtp(data: Partial<IUser>) {
+  async requestRegisterOtp(data: Partial<RegisterDto>) {
     const { name, email, password,confirmPassword} = data;
 
     if(!name||!email||!password||!confirmPassword){

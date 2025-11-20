@@ -33,6 +33,11 @@ const UserSchema = new Schema<IUser>(
 
     longest_streak: { type: Number, default: 0 },
 
+    application_status:{
+      type:String,
+      enum:['pending','approved','rejected']
+    },
+
     last_login_date: Date,
 
     last_logout_date: Date,

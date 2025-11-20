@@ -1,10 +1,10 @@
 import { Router } from "express";
-import {UserProfileController} from './user.controller'
+import UserController from "./user.controller";
 import { protect } from "../../middleware/auth.middleware";
-const userRoute = Router()
 
-userRoute.get('/profile',protect,UserProfileController)
+const userRoute = Router();
+const controller = new UserController();
 
+userRoute.get("/profile", protect, (req, res) => controller.profile(req, res));
 
-
-export default userRoute
+export default userRoute;

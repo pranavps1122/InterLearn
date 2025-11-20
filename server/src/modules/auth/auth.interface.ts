@@ -4,7 +4,6 @@ export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
-  confirmPassword:string,
   role: "student" | "reviewer" | "admin";
   bio?: string;
   domains?: string[];     
@@ -18,6 +17,7 @@ export interface IUser extends Document {
   last_login_date?: Date;
   last_logout_date?: Date;
   login_ip?: string;
+  application_status:'pending'|'approved'|'rejected'
   failed_login_attempts?: number;
   last_failed_attempt?: Date;
 }

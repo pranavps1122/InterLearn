@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 
 import authRoutes from './modules/auth/auth.routes'
 import userRoutes from './modules/user/user.route'
+import reviewerRoutes from './modules/reviewer/reviewer.route'
 dotenv.config()
 
 
@@ -18,5 +19,6 @@ app.get('/health',(req,res)=>{
 
 app.use('/api/auth',authRoutes)
 app.use('/api/user',userRoutes)
+app.use('/api/reviewer',reviewerRoutes)
 
 export default app
