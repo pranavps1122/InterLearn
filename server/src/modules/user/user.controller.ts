@@ -1,21 +1,23 @@
-import { Request,Response } from "express";
-import UserService from './user.service'
+import { Request, Response } from "express";
+import UserService from "./user.service";
 
-const userService = new UserService()
+export default class UserController {
+  private userService = new UserService();
 
-export const UserProfileController = async (req:Request,res:Response)=>{
+  async profile(req: Request, res: Response) {
     try {
-        const result = await userService.UserProfile(req.user!.id)
+      const result = await this.userService.UserProfile(req.user!.id);
 
-        return res.status(200).json({
-            success:true,
-            user:result
-        })
-    } catch (error:any) {
-        console.log('error while getting profile',error)
-        return res.status(401).json({
-            success:false,
-            message:error.message
-        })
+      return res.status(200).json({
+        success: true,
+        user: result,
+      });
+    } catch (error: any) {
+      console.log("error while getting profile", error);
+      return res.status(401).json({
+        success: false,
+        message: error.message,
+      });
     }
+  }
 }

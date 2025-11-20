@@ -1,38 +1,49 @@
-import { Request,Response } from "express";
+import { Request, Response } from "express";
 import AuthService from "./auth.service";
 
-const authService = new AuthService()
+export default class AuthController {
+  private authService: AuthService;
 
+  constructor() {
+    this.authService = new AuthService();
+  }
 
-export const requestOtpController = async (req:Request,res:Response)=>{
+  async requestOtp(req: Request, res: Response): Promise<any> {
     try {
-        const result = await authService.requestRegisterOtp(req.body)
-        res.json({success:true,...result})
-    } catch (error:any) {
-        res.status(400).json({success:false,message:error.message})
-        console.log('error while send otp',error)
+      const result = await this.authService.requestRegisterOtp(req.body);
+      return res.json({ success: true, ...result });
+    } catch (error: any) {
+      console.log("Error while sending OTP:", error);
+      return res.status(400).json({
+        success: false,
+        message: error.message,
+      });
     }
-}
+  }
 
-export const verifyRegisterController = async(req:Request,res:Response)=>{
+  async verifyRegister(req: Request, res: Response): Promise<any> {
     try {
-       const result = await authService.verifyAndRegister(req.body)
-       res.json({success:true,...result}) 
-    } catch (error:any) {
-          res.status(400).json({success:false,message:error.message})
-          console.log('error while register',error)
+      const result = await this.authService.verifyAndRegister(req.body);
+      return res.json({ success: true, ...result });
+    } catch (error: any) {
+      console.log("Error while registering:", error);
+      return res.status(400).json({
+        success: false,
+        message: error.message,
+      });
     }
-}
-
-export const LoginController = async (req:Request,res:Response)=>{
+  }
+  
+  async login(req: Request, res: Response): Promise<any> {
     try {
-        const result = await authService.UserLogin(req.body)
-        res.json({success:true,...result})
-    } catch (error:any) {
-         res.status(400).json({success:false,message:error.message})
-         console.log('error while login',error)
+      const result = await this.authService.UserLogin(req.body);
+      return res.json({ success: true, ...result });
+    } catch (error: any) {
+      console.log("Error while login:", error);
+      return res.status(400).json({
+        success: false,
+        message: error.message,
+      });
     }
+  }
 }
-
-
-
