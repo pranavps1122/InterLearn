@@ -17,13 +17,17 @@
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
+    "google-auth-library": "^10.5.0",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.554.0",
     "mongoose": "^8.20.0",
     "multer": "^2.0.2",
     "multer-storage-cloudinary": "^4.0.0",
     "nodemailer": "^7.0.10",
-    "react-router-dom": "^7.9.6"
+    "pdf-lib": "^1.17.1",
+    "react-router-dom": "^7.9.6",
+    "sharp": "^0.34.5",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
