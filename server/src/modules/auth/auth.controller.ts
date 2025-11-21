@@ -21,6 +21,19 @@ export default class AuthController {
     }
   }
 
+  async resendOtp(req:Request,res:Response):Promise<any>{
+    try {
+      const result = await this.authService.ResendOtp(req.body)
+      return res.json({success:true,...result})
+    } catch (error:any) {
+      console.log('error while rensend otp',error)
+        return res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  }
+
   async verifyRegister(req: Request, res: Response): Promise<any> {
     try {
       const result = await this.authService.verifyAndRegister(req.body);
@@ -41,6 +54,19 @@ export default class AuthController {
     } catch (error: any) {
       console.log("Error while login:", error);
       return res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  }
+  async GoogleLogin(req:Request,res:Response):Promise<any>{
+    try {
+      console.log('Google',req.body)
+      const result = await this.authService.GoogleAuthLogin(req.body)
+      res.json({success:true,result})
+    } catch (error:any) {
+      console.log('Error while login with google',error)
+       return res.status(400).json({
         success: false,
         message: error.message,
       });

@@ -1,8 +1,9 @@
 import { Router } from "express";
-import {upload} from '../../middleware/multer'
+import { upload } from "../../middleware/multer";
 import ReviewerController from "./reviewer.controller";
-const reviewerRoute = Router()
-const Reviewer = new ReviewerController()
+
+const reviewerRoute = Router();
+const Reviewer = new ReviewerController();
 
 reviewerRoute.post(
   "/submit",
@@ -14,5 +15,4 @@ reviewerRoute.post(
   (req, res) => Reviewer.BecomeReviewerForm(req, res)
 );
 
-
-export default reviewerRoute
+export default reviewerRoute;
