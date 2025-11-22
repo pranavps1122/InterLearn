@@ -1,0 +1,322 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Header Wrapper */
+.header {
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: linear-gradient(135deg, #001e3c 0%, #0d2b47 100%);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* ↓ Reduced height */
+/* ↓ Fixed compact header height */
+.header-container {
+  max-width: 90rem;
+  margin: 0 auto;
+
+  height: 68px;           /* FIXED HEIGHT → prevents header from expanding */
+  padding: 0 1.2rem;      /* remove vertical padding completely */
+
+  display: flex;
+  align-items: center;    /* ensure logo is centered vertically */
+  justify-content: space-between;
+  gap: 11.5rem;
+}
+
+
+/* Desktop Navigation */
+.nav-desktop {
+  display: none;
+  gap: 0.5rem;
+  flex: 1;
+  margin: 0 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .nav-desktop {
+    display: flex;
+  }
+}
+
+.nav-item-wrapper {
+  position: relative;
+}
+
+.nav-link {
+  color: #e5e7eb;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 0.4rem 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.3s ease;
+  border-radius: 6px;
+  position: relative;
+  cursor: pointer;
+}
+
+.nav-link:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #3b82f6, #06b6d4);
+  transition: width 0.3s ease;
+  border-radius: 2px;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.chevron {
+  transition: transform 0.3s ease;
+}
+
+.nav-link:hover .chevron {
+  transform: rotate(180deg);
+}
+
+/* Dropdown */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: rgba(13, 43, 71, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 0.5rem;
+  min-width: 160px;
+  margin-top: 0.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-item {
+  display: block;
+  color: #d1d5db;
+  text-decoration: none;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.dropdown-item:hover {
+  background: rgba(59, 130, 246, 0.2);
+  color: #3b82f6;
+}
+
+/* Desktop Auth Buttons */
+.auth-buttons {
+  display: none;
+  gap: 0.7rem;
+}
+.profile-wrapper {
+  position: relative;
+}
+
+.profile-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: 38px;
+  right: 0;
+  width: 140px;
+  background: rgba(0,0,0,0.9);
+  border-radius: 8px;
+  padding: 8px 0;
+  display: flex;
+  flex-direction: column;
+  z-index: 50;
+}
+
+.profile-dropdown button {
+  background: none;
+  border: none;
+  padding: 10px 15px;
+  text-align: left;
+  color: white;
+  cursor: pointer;
+}
+
+.profile-dropdown button:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+@media (min-width: 768px) {
+  .auth-buttons {
+    display: flex;
+  }
+}
+
+.btn-login,
+.btn-register {
+  padding: 0.45rem 1.3rem; 
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  font-size: 0.85rem;
+  transition: 0.3s ease;
+}
+
+.btn-login {
+  background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+  color: white;
+}
+
+.btn-register {
+  background: transparent;
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  color: #e5e7eb;
+}
+
+/* Mobile Menu Button */
+.menu-toggle {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+/* ---------- LOGO FIX ---------- */
+
+/* Wrapper around logo */
+.logo-section {
+  display: flex;
+  align-items: center;
+}
+
+/* Anchor around logo */
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+/* Keep logo big WITHOUT expanding header */
+.logo img {
+  height: 150px;     /* adjust freely */
+  width: 170px;
+  margin-left: 20px;
+  object-fit: contain;
+}
+
+
+/* Optional: reduce logo on small screens */
+@media (max-width: 768px) {
+  .logo img {
+    width: 75px;
+  }
+}
+
+@media (min-width: 768px) {
+  .menu-toggle {
+    display: none;
+  }
+}
+
+/* Mobile Menu */
+.mobile-menu {
+  background: rgba(13, 43, 71, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  animation: slideDown 0.3s ease;
+}
+
+.mobile-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.mobile-link {
+  color: #e5e7eb;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: 0.2s ease;
+}
+
+.mobile-submenu {
+  padding-left: 1rem;
+  margin-top: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.mobile-submenu-item {
+  color: #9ca3af;
+  font-size: 0.9rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  transition: 0.2s ease;
+}
+
+/* Mobile Auth */
+.mobile-auth {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mobile-btn-login,
+.mobile-btn-register {
+  width: 100%;
+  padding: 0.875rem;
+  font-weight: 700;
+  border-radius: 8px;
+  border: none;
+  font-size: 0.95rem;
+}

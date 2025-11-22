@@ -1,0 +1,121 @@
+/* ---------------- Footer Wrapper ---------------- */
+.footer {
+  background: #0f3057;
+  padding: 1.5rem 1rem 1rem; /* reduced height */
+  color: white;
+}
+
+/* ---------------- Footer Grid ---------------- */
+.footer-container {
+  max-width: 80rem;
+  margin: 0 auto;
+  display: grid;
+  gap: 1.8rem;            /* smaller gap */
+}
+
+@media (min-width: 768px) {
+  .footer-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .footer-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ---------------- Brand Section ---------------- */
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;           /* smaller gap */
+}
+
+.footer-text {
+  font-size: 0.85rem;    /* smaller text */
+  color: #9ca3af;
+  line-height: 1.5;
+  text-decoration: none;
+}
+
+/* ---------------- Logo ---------------- */
+.footer-logo-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.footer-logo-wrapper img,
+.footer-logo-wrapper svg {
+  height: 65px;          /* reduced from 105px */
+  width: auto;
+  object-fit: contain;
+}
+
+/* ---------------- Social Icons ---------------- */
+.footer-social {
+  display: flex;
+  gap: 0.7rem;
+  margin-top: 0.3rem;
+}
+
+.social-icon {
+  background: rgba(255, 255, 255, 0.12);
+  padding: 0.55rem;      /* reduced from 1rem */
+  border-radius: 50%;
+  transition: 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.social-icon:hover {
+  background: #3b82f6;
+  transform: translateY(-2px);
+}
+
+/* ---------------- Titles ---------------- */
+.footer-title {
+  font-size: 1rem;       /* reduced size */
+  font-weight: 700;
+  margin-bottom: 0.7rem;
+}
+
+/* ---------------- Links ---------------- */
+.footer-links a {
+  font-size: 0.85rem;
+  color: #9ca3af;
+  transition: 0.25s ease;
+}
+a{
+    text-decoration: none;
+}
+.footer-links li {
+  margin-bottom: 0.45rem;
+}
+
+.footer-links a:hover {
+  color: white;
+  padding-left: 3px;
+}
+
+/* ---------------- Contact ---------------- */
+.footer-contact li {
+  font-size: 0.85rem;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.contact-icon {
+  font-size: 1rem;
+}
+
+/* ---------------- Bottom Bar ---------------- */
+.footer-bottom {
+  text-align: center;
+  margin-top: 1.5rem;      /* remove negative space */
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+  color: #9ca3af;
+  font-size: 0.75rem;
+}
