@@ -65,6 +65,7 @@ const BecomeReviewer: React.FC = () => {
     if (step === 0) {
       if (!formData.full_name.trim()) e.full_name = "Full Name is required";
       if (!formData.email.trim()) e.email = "Email is required";
+
       if (!formData.phone.trim()) e.phone = "Phone is required";
     }
 
@@ -106,6 +107,8 @@ const BecomeReviewer: React.FC = () => {
       setErrors={setErrors}
       submitted={submitted}
       setSubmitted={setSubmitted}
+       currentStep={step}          
+      setCurrentStep={setStep}    
     />
   ];
 

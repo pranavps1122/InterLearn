@@ -78,8 +78,12 @@ export default class AuthService {
       throw new Error('All fileds are required')
     }
     const user = await UserModel.findOne({email})
+
     if(!user){
       throw new Error('User not exists')
+    }
+    if(user.googleUser){
+      throw new Error('Please Login With Google')
     }
     if(!user.password){
       throw new Error('Login With Google')

@@ -7,6 +7,8 @@ interface SubmitProps extends SectionProps {
   setErrors: React.Dispatch<React.SetStateAction<ErrorType>>;
   submitted: boolean;
   setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
+  currentStep: number;
+  setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const SubmitButtons: React.FC<SubmitProps> = ({
@@ -15,11 +17,11 @@ const SubmitButtons: React.FC<SubmitProps> = ({
   setErrors,
   submitted,
   setSubmitted,
+  currentStep,
+  setCurrentStep,        
 }) => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  
 
   const validate = (): boolean => {
     const newErrors: ErrorType = {};
@@ -49,10 +51,10 @@ const SubmitButtons: React.FC<SubmitProps> = ({
   };
 
   const handleSubmit = async () => {
-    if (isSubmitting) return;          
+    if (isSubmitting) return;
     if (!validate()) return;
 
-    setIsSubmitting(true);             
+    setIsSubmitting(true);
 
     try {
       const fd = new FormData();
@@ -90,51 +92,23 @@ const SubmitButtons: React.FC<SubmitProps> = ({
 
       if (!res.success) {
         toast.error(res.message);
-        setIsSubmitting(false); 
+        setIsSubmitting(false);
         return;
       }
 
       toast.success("Application submitted successfully!");
       setSubmitted(true);
-      window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-      setTimeout(()=>{
-        window.location.reload()
-      },12000)
+      window.scrollTo({ top: 0, behavior: "smooth" });
+
+      setTimeout(() => window.location.reload(), 12000);
 
     } catch (error: any) {
-      toast.error("Server error. Try again.");
+      toast.error(error.message || "Server error. Try again later.");
       setIsSubmitting(false);
     }
   };
 
-  const handleReset = () => {
-    if (isSubmitting) return;      
 
-    setFormData({
-      full_name: "",
-      email: "",
-      phone: "",
-      linkedin_url: "",
-      portfolio_url: "",
-      education: "",
-      experience_years: "",
-      field: "",
-      domains: [],
-      skills: [],
-      current_role: "",
-      company_name: "",
-      motivation: "",
-      additional_info: "",
-      education_certificate_file: null,
-      resume_file: null,
-      experience_certificate_file: null,
-    });
-
-    setErrors({});
-  };
 
   return (
     <div className="submit-row">
@@ -144,29 +118,28 @@ const SubmitButtons: React.FC<SubmitProps> = ({
           <button
             className="submit-btn"
             onClick={handleSubmit}
-            disabled={isSubmitting}          
+            disabled={isSubmitting}
           >
             {isSubmitting ? "Submitting..." : "Submit Application"}
           </button>
 
-          {!isSubmitting&&(
-            <button
-            className="reset-btn"
-            onClick={handleReset}
-            disabled={isSubmitting}           
-          >
-           Clear
-          </button>
-          )
-          
-          }
+          {!isSubmitting && (
+            <>
+              {currentStep > 0 && (
+                <button
+                  className="back-btn"
+                  onClick={() => setCurrentStep(prev => prev - 1)}
+                >
+                  Back
+                </button>
+              )}
+
+            </>
+          )}
         </>
       )}
 
-      {submitted && (
-        <p className="success-text">Application Submitted ✔</p>
-      )}
-
+      {submitted && <p className="success-text">Application Submitted ✔</p>}
     </div>
   );
 };

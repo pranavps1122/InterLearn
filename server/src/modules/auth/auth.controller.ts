@@ -51,8 +51,9 @@ export default class AuthController {
     try {
       const result = await this.authService.UserLogin(req.body);
       return res.json({ success: true, ...result });
+      
     } catch (error: any) {
-      console.log("Error while login:", error);
+      console.log("Error while login:", error.message);
       return res.status(400).json({
         success: false,
         message: error.message,
