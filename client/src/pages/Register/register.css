@@ -1,5 +1,3 @@
-/* 1. Import Font */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 * {
   margin: 0;
@@ -9,7 +7,7 @@
 }
 
 body {
-  background-color: #001a33; 
+  background-color: #001528;
 }
 
 .register-container {
@@ -18,78 +16,89 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  /* Radial gradient for depth */
-  background: radial-gradient(circle at top left, #131d24 0%, #001a33 60%, #000d1a 100%);
+  background: linear-gradient(135deg, #001528 0%, #000c18 100%);
   padding: 20px;
   position: relative;
-  overflow: hidden; 
+  overflow: hidden;
 }
 
-/* Ambient glow */
-.register-container::before {
+/* Glow Orbs */
+.register-container::before,
+.register-container::after {
   content: '';
   position: absolute;
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(#050a0b, transparent 70%);
-  opacity: 0.15;
-  filter: blur(60px);
-  top: 10%;
-  left: 50%;
-  transform: translateX(-50%);
+  width: 450px;
+  height: 450px;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.18;
   z-index: 0;
-  pointer-events: none;
+}
+
+.register-container::before {
+  background: #00cfff;
+  top: -10%;
+  left: -10%;
+}
+
+.register-container::after {
+  background: #0077ff;
+  bottom: -10%;
+  right: -10%;
 }
 
 .register-card {
   position: relative;
   z-index: 1;
-  /* Glassmorphism Background */
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
-  border-left: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 16px; /* Slightly tighter radius for smaller card */
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  
-  /* --- REDUCED SIZE SETTINGS --- */
-  padding: 35px 40px; /* Reduced padding (was 50px 60px) */
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  padding: 40px 42px;
   width: 100%;
-  max-width: 400px;   /* Reduced width (was 480px) */
-  /* ---------------------------- */
+  max-width: 400px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  animation: fadeUp 0.7s ease forwards;
+  opacity: 0;
+}
 
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+@keyframes fadeUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0px);
+    opacity: 1;
+  }
 }
 
 .register-title {
-  font-size: 32px; /* Slightly smaller font to fit the smaller card */
+  font-size: 32px;
   font-weight: 600;
   color: #ffffff;
   margin-bottom: 8px;
   text-align: center;
   letter-spacing: 0.5px;
-  text-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
+  text-shadow: 0 0 12px rgba(0, 217, 255, 0.32);
 }
 
-.register-title span, 
-.register-title {
-  color: #00d9ff; 
+.register-title span {
+  color: #00d9ff;
 }
 
 .register-subtitle {
-  font-size: 14px; /* Adjusted for balance */
+  font-size: 14px;
   font-weight: 300;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.75);
   text-align: center;
-  margin-bottom: 30px; /* Reduced margin */
-  line-height: 1.4;
+  margin-bottom: 28px;
 }
 
 .register-form {
   display: flex;
   flex-direction: column;
-  gap: 15px; /* Reduced gap between inputs */
+  gap: 18px;
 }
 
 .form-group {
@@ -101,66 +110,76 @@ body {
 .form-label {
   font-size: 13px;
   font-weight: 500;
-  color: #e0e0e0;
-  margin-left: 4px;
+  color: #d8efff;
 }
 
 .form-input {
   width: 100%;
-  padding: 14px 18px; /* Slightly smaller input padding */
+  padding: 14px 18px;
   font-size: 14px;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 10px;
   outline: none;
   color: #ffffff;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
 }
 
 .form-input::placeholder {
-  color: rgba(255, 255, 255, 0.3);
-  font-weight: 300;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.form-input:hover {
+  border-color: rgba(0, 217, 255, 0.4);
 }
 
 .form-input:focus {
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(255, 255, 255, 0.14);
   border-color: #00d9ff;
-  box-shadow: 0 0 15px rgba(0, 217, 255, 0.15);
-  transform: translateY(-1px);
+  box-shadow: 0 0 10px rgba(0, 217, 255, 0.25);
 }
 
 .submit-btn {
   width: 100%;
-  padding: 16px; /* Adjusted padding */
+  padding: 15px;
   font-size: 15px;
   font-weight: 600;
-  letter-spacing: 1px;
-  color: #001a33;
-  background: linear-gradient(135deg, #00d9ff 0%, #00b8d4 100%);
+  letter-spacing: 0.5px;
+  color: #001021;
+  background: linear-gradient(135deg, #00d9ff, #0099ff);
   border: none;
   border-radius: 10px;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  margin-top: 5px;
-  text-transform: uppercase;
-  box-shadow: 0 4px 15px rgba(0, 217, 255, 0.3);
+  transition: all 0.3s ease-in-out;
+  margin-top: 8px;
+  box-shadow: 0 6px 20px rgba(0, 153, 255, 0.35);
 }
 
 .submit-btn:hover {
-  background: linear-gradient(135deg, #33e2ff 0%, #00d9ff 100%);
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 217, 255, 0.5);
+  background: linear-gradient(135deg, #33e2ff, #00baff);
+  box-shadow: 0 8px 25px rgba(0, 153, 255, 0.45);
 }
 
-.submit-btn:active {
-  transform: translateY(1px);
-  box-shadow: 0 2px 10px rgba(0, 217, 255, 0.3);
+.submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 .register-footer {
   text-align: center;
-  margin-top: 25px;
-  font-size: 13px;
+  margin-top: 24px;
+  font-size: 14px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  flex-wrap: wrap;
 }
 
 .footer-text {
@@ -170,8 +189,8 @@ body {
 .footer-link {
   color: #00d9ff;
   text-decoration: none;
-  font-weight: 500;
-  margin-left: 5px;
+  font-weight: 600;
+  cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
 }
@@ -180,11 +199,15 @@ body {
   content: '';
   position: absolute;
   width: 0;
-  height: 1px;
+  height: 1.5px;
   bottom: -2px;
   left: 0;
   background-color: #00d9ff;
   transition: width 0.3s ease;
+}
+
+.footer-link:hover {
+  color: #33e2ff;
 }
 
 .footer-link:hover::after {
@@ -192,31 +215,103 @@ body {
 }
 
 .copyright {
-  margin-top: 30px;
+  margin-top: 20px;
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.38);
   text-align: center;
+}
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-input {
+  padding-right: 45px !important;
+}
+
+.toggle-password-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.eye-icon {
+  width: 22px;
+  height: 22px;
+  stroke: #ffffff;
+  opacity: 0.7;
+  transition: 0.2s ease;
+}
+
+.toggle-password-btn:hover .eye-icon {
+  opacity: 1;
+}
+.password-requirements {
+  background: rgba(0, 217, 255, 0.05);
+  border: 1px solid rgba(0, 217, 255, 0.15);
+  border-radius: 10px;
+  padding: 16px 18px;
+  margin-top: 4px;
+}
+
+.requirements-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #00d9ff;
+  margin-bottom: 10px;
+}
+
+.requirements-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.requirements-list li {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  padding-left: 20px;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.requirements-list li::before {
+  content: '✕';
+  position: absolute;
+  left: 0;
+  color: rgba(255, 77, 77, 0.6);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.requirements-list li.valid {
+  color: rgba(0, 255, 170, 0.9);
+}
+
+.requirements-list li.valid::before {
+  content: '✓';
+  color: #00ffaa;
 }
 
 /* Responsive Design */
-@media (max-width: 600px) {
+@media (max-width: 480px) {
   .register-card {
-    padding: 30px 20px;
-    max-width: 100%; /* Full width on mobile */
-    border-radius: 16px;
+    padding: 28px 30px;
+    max-width: 330px;
   }
 
   .register-title {
     font-size: 28px;
   }
 
-  .register-subtitle {
-    font-size: 13px;
-    margin-bottom: 25px;
-  }
-  
-  .submit-btn {
-    padding: 15px;
-    font-size: 14px;
+  .footer-row {
+    flex-direction: row;
+    gap: 4px;
   }
 }

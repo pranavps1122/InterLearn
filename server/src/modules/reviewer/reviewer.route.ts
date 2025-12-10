@@ -15,4 +15,8 @@ reviewerRoute.post(
   (req, res) => Reviewer.BecomeReviewerForm(req, res)
 );
 
+reviewerRoute.post('/login',
+  (req,res)=>Reviewer.Login(req,res)
+)
+
 export default reviewerRoute;

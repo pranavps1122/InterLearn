@@ -1,165 +1,213 @@
-import UserModel from "./auth.model";
-import {RegisterDto} from './auth.dto'
+import { RegisterDto } from "./auth.dto";
 import bcrypt from "bcryptjs";
 import OtpService from "./otp.service";
-import generateToken from "../../utils/generateToken";
+import generateToken from "../../core/utils/generateToken";
 import otpModel from "./otp.model";
 import { OAuth2Client } from "google-auth-library";
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
-const otpService = new OtpService()
+import { HttpError } from "@/core/errors/httpError";
+import { UserRepository } from "./repository/user.repository";
+import { mapUserToDto } from "./mappers/user.mapper";
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const otpService = new OtpService();
+const userRepo = new UserRepository();
 
 export default class AuthService {
   async requestRegisterOtp(data: Partial<RegisterDto>) {
-    const { name, email, password,confirmPassword} = data;
+    const { name, email, password, confirmPassword } = data;
 
-    if(!name||!email||!password||!confirmPassword){
-      throw new Error('all fields are required')
+    if (!name || !email || !password || !confirmPassword) {
+      throw HttpError.BadRequest("All fields are required");
     }
-    const existing = await UserModel.findOne({email})
-    if(existing){
-      throw new Error('user already exist')
+    if (password !== confirmPassword) {
+      throw HttpError.BadRequest("Passwords do not match");
     }
-    
 
-    const otp = await otpService.generateOtp(email)
+    const existing = await userRepo.findByEmail(email);
+    if (existing) {
+     
+      throw HttpError.Conflict("User already exists");
+    }
 
-    await otpService.sendOtp(email,otp)
-    return{message:'Otp sent to your email'}
+    const otp = await otpService.generateOtp(email);
+    await otpService.sendOtp(email, otp);
+
+    return { message: "OTP sent to your email" };
   }
 
-    async ResendOtp(data: Partial<RegisterDto>) {
-      const { email } = data;
-
-      if (!email) {
-        throw new Error("Email is required");
-      }
-      await otpModel.deleteMany({email})
-      const existing = await UserModel.findOne({ email });
-      if (existing) {
-        throw new Error("User already exists");
-      }
-
-      const otp = await otpService.generateOtp(email);
-
-      await otpService.sendOtp(email, otp);
-
-      return { message: "OTP resent successfully" };
+  async resendOtp(data: Partial<{ email: string }>) {
+    const { email } = data;
+    if (!email) {
+      throw HttpError.BadRequest("Email is required");
     }
 
-  async verifyAndRegister(data:{
-    name:string,
-    email:string,
-    password:string,
-    otp:string
-  }){
-    const {name,email,password,otp}=data
+    await otpModel.deleteMany({ email });
 
-    await otpService.verifyOtp(email,otp)
-    const hashed = await bcrypt.hash(password,10)
-    const user = await UserModel.create({
+    const existing = await userRepo.findByEmail(email);
+    if (existing) {
+      throw HttpError.Conflict("User already exists");
+    }
+
+    const otp = await otpService.generateOtp(email);
+    await otpService.sendOtp(email, otp);
+
+    return { message: "OTP resent successfully" };
+  }
+
+  async verifyAndRegister(data: { name: string; email: string; password: string; otp: string }) {
+    const { name, email, password, otp } = data;
+
+    if (!name || !email || !password || !otp) {
+      throw HttpError.BadRequest("All fields are required");
+    }
+
+    await otpService.verifyOtp(email, otp);
+
+    const existing = await userRepo.findByEmail(email);
+    if (existing) {
+      throw HttpError.Conflict("User already exists");
+    }
+
+    const hashed = await bcrypt.hash(password, 10);
+    const created = await userRepo.create({
       name,
       email,
-      password:hashed
-    })
+      password: hashed,
+      googleUser: false,
+    } as any); 
+
+    const token = generateToken((created as any)._id.toString(), (created as any).role);
+
     return {
-      message:'Registration successful',
-      id:user._id.toString(),
-      name:user.name,
-      email:user.email
-    }
+      message: "Registration successful",
+      token,
+      user: mapUserToDto(created as any),
+    };
   }
-  
-  async UserLogin(data:{
-    email:string,
-    password:string
-  }){
-    const {email,password}=data
-    if(!email||!password){
-      throw new Error('All fileds are required')
-    }
-    const user = await UserModel.findOne({email})
 
-    if(!user){
-      throw new Error('User not exists')
+  async forgotPasswordOtp(data: Partial<{ email: string }>) {
+    const { email } = data;
+    if (!email) {
+      throw HttpError.BadRequest("Email is required");
     }
-    if(user.googleUser){
-      throw new Error('Please Login With Google')
-    }
-    if(!user.password){
-      throw new Error('Login With Google')
-    }
-    const isMatch = await bcrypt.compare(password,user.password)
-
-    if(!isMatch){
-      throw new Error('Incorrect Password')
+    const existingUser = await userRepo.findByEmail(email);
+    if (!existingUser) {
+      throw HttpError.NotFound("User does not exist");
     }
 
-    const token = generateToken(user._id.toString(),user.role)
-    return {message:'Login Successfull',
-           token,
-           user:{
-            id:user._id,
-            name:user.name,
-            email:user.email,
-            role:user.role
-           }
+    const otp = await otpService.generateOtp(email);
+    await otpService.sendOtp(email, otp);
 
-    }
-    
+    return { message: "OTP sent successfully" };
   }
-     
-  async GoogleAuthLogin(data: any) {
-  
-        const idToken = data.credential;
 
-        if (!idToken) {
-          throw new Error("Google token missing");
-        }
+  async forgotPasswordOtpVerification(data: { email: string; otp: string }) {
+    const { email, otp } = data;
+    if (!email || !otp) {
+      throw HttpError.BadRequest("Email and OTP are required");
+    }
 
-        const ticket = await client.verifyIdToken({
-          idToken,
-          audience: process.env.GOOGLE_CLIENT_ID
-        });
+    const existingUser = await userRepo.findByEmail(email);
+    if (!existingUser) {
+      throw HttpError.NotFound("User not found");
+    }
 
-        const payload = ticket.getPayload();
+    await otpService.verifyOtp(email, otp);
+    return { message: "OTP verified successfully" };
+  }
 
-         
+  async changeForgotPassword(data: { newPassword: string; confirmPassword: string; email: string }) {
+    const { newPassword, confirmPassword, email } = data;
+    if (!newPassword || !confirmPassword || !email) {
+      throw HttpError.BadRequest("Please include all fields");
+    }
+    if (newPassword !== confirmPassword) {
+      throw HttpError.BadRequest("Passwords do not match");
+    }
 
-        if (!payload) throw new Error("Invalid Google Token");
-
-        const { email, name, picture ,aud} = payload;
-
-         console.log("BACKEND ENV CLIENT ID =>", process.env.GOOGLE_CLIENT_ID);
-          console.log("TOKEN AUDIENCE =>", payload.aud);
-        if (!email) throw new Error("Google email missing");
-
-        let user = await UserModel.findOne({ email });
-
-        if (!user) {
-          user = await UserModel.create({
-            email,
-            name,
-            googleUser:true,
-            password: null,
-           
-          });
-        }
-
-        const token = generateToken(user._id.toString(), user.role);
-
-        return {
-          message: "Google Login Successful",
-          token,
-          user: {
-            id: user._id,
-            name: user.name,
-            email: user.email,
-            role: user.role,
+    const hash = await bcrypt.hash(newPassword, 10);
     
-          }
-        };
-      }
+    const updatedUser = await userRepo.updateByFilter({ email }, { password: hash });
+    if (!updatedUser) {
+      throw HttpError.NotFound("User does not exist");
+    }
 
- 
+    return { message: "Password reset successfully" };
+  }
+
+  async userLogin(data: { email: string; password: string }) {
+    const { email, password } = data;
+
+    if (!email || !password) {
+      throw HttpError.BadRequest("All fields are required");
+    }
+
+    // get a lean object for fast check
+    const userLean = await userRepo.findByEmail(email);
+    if (!userLean) {
+      // security-first: generic unauthorized, or use NotFound if desired
+      throw HttpError.Unauthorized("Invalid email or password");
+    }
+
+    if (userLean.googleUser) {
+      throw HttpError.BadRequest("Please login with Google");
+    }
+
+    // fetch full doc with password for comparison
+    const userDoc = await userRepo.findByEmailWithPassword(email);
+    if (!userDoc || !userDoc.password) {
+      throw HttpError.BadRequest("Please login with Google");
+    }
+
+    const isMatch = await bcrypt.compare(password, userDoc.password);
+    if (!isMatch) {
+      throw HttpError.Unauthorized("Invalid email or password");
+    }
+
+    const token = generateToken(userDoc._id.toString(), userDoc.role);
+
+    return {
+      message: "Login successful",
+      token,
+      user: mapUserToDto(userLean as any),
+    };
+  }
+
+  async googleAuthLogin(data: any) {
+    const idToken = data?.credential;
+    if (!idToken) {
+      throw HttpError.BadRequest("Google token missing");
+    }
+
+    const ticket = await client.verifyIdToken({
+      idToken,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+    if (!payload) throw HttpError.BadRequest("Invalid Google token");
+
+    const { email, name } = payload;
+    if (!email) throw HttpError.BadRequest("Google email missing");
+
+    let user = await userRepo.findByEmail(email);
+
+    if (!user) {
+      const created = await userRepo.create({
+        email,
+        name,
+        googleUser: true,
+        password: null,
+      } as any);
+      user = created as any;
+    }
+
+    const token = generateToken((user as any)._id.toString(), (user as any).role);
+
+    return {
+      message: "Google login successful",
+      token,
+      user: mapUserToDto(user as any),
+    };
+  }
 }
-
