@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import type { SectionProps, ErrorType } from "../types";
-import { submitReviewerApplication } from "../../../services/becomeReviewer.service";
+import { submitReviewerApplication } from "../../../services/reviewer.service"
 import { toast } from "react-toastify";
 
 interface SubmitProps extends SectionProps {

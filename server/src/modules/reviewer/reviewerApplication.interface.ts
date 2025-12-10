@@ -29,7 +29,7 @@ export interface IReviewerApplication extends Document {
   resume_file: string;
   education_certificate_file?: string;
   experience_certificate_file?: string;
-
+  password:string,
   application_status: "pending" | "approved" | "rejected";
 
   created_at?: Date;

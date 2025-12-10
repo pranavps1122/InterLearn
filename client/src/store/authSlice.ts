@@ -1,4 +1,4 @@
-import  { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 interface User {
@@ -14,10 +14,25 @@ interface AuthState {
   isAuthenticated: boolean;
 }
 
+const safeJSONParse = (value: string | null) => {
+  if (!value || value === "undefined" || value === "null") return null;
+  try {
+    return JSON.parse(value);
+  } catch {
+    return null;
+  }
+};
+
 const initialState: AuthState = {
-  user: JSON.parse(localStorage.getItem("user") || "null"),
-  token: localStorage.getItem("token"),
-  isAuthenticated: !!localStorage.getItem("token"),
+  user: safeJSONParse(localStorage.getItem("user")),
+  token:
+    localStorage.getItem("token") &&
+    localStorage.getItem("token") !== "undefined"
+      ? localStorage.getItem("token")
+      : null,
+  isAuthenticated:
+    !!localStorage.getItem("token") &&
+    localStorage.getItem("token") !== "undefined",
 };
 
 const authSlice = createSlice({

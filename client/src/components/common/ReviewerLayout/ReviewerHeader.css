@@ -1,0 +1,537 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Reviewer Header - Dark Theme with Cyan Accent */
+.reviewer-header {
+  background: linear-gradient(135deg, #000000 0%, #0a0a0a 50%, #000000 100%);
+  border-bottom: 2px solid rgba(0, 217, 255, 0.15);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+}
+
+.reviewer-header-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Logo Section */
+.reviewer-logo-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-right: 40px;
+}
+
+.reviewer-logo {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #00d9ff 0%, #00b8d4 100%);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000000;
+  font-weight: 700;
+  box-shadow: 0 4px 15px rgba(0, 217, 255, 0.3);
+}
+
+.reviewer-logo svg {
+  width: 24px;
+  height: 24px;
+}
+
+.reviewer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.reviewer-brand h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+}
+
+.reviewer-brand span {
+  font-size: 11px;
+  color: #00d9ff;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Navigation */
+.reviewer-nav {
+  display: flex;
+  gap: 30px;
+  flex: 1;
+  margin: 0 20px;
+}
+
+.reviewer-nav-link {
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  position: relative;
+  padding-bottom: 5px;
+}
+
+.reviewer-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #00d9ff, #00b8d4);
+  transition: width 0.3s ease;
+}
+
+.reviewer-nav-link:hover {
+  color: #00d9ff;
+}
+
+.reviewer-nav-link:hover::after {
+  width: 100%;
+}
+
+.reviewer-nav-link.active {
+  color: #00d9ff;
+}
+
+.reviewer-nav-link.active::after {
+  width: 100%;
+}
+
+/* Right Section */
+.reviewer-header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Notification */
+.reviewer-notification-wrapper {
+  position: relative;
+}
+
+.reviewer-notification-btn {
+  background: rgba(0, 217, 255, 0.08);
+  border: 1px solid rgba(0, 217, 255, 0.2);
+  color: #00d9ff;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.reviewer-notification-btn:hover {
+  background: rgba(0, 217, 255, 0.15);
+  border-color: rgba(0, 217, 255, 0.4);
+  box-shadow: 0 0 15px rgba(0, 217, 255, 0.2);
+}
+
+.reviewer-notification-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.reviewer-notification-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: linear-gradient(135deg, #ff6b6b, #ff5252);
+  color: white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4);
+}
+
+/* Notification Dropdown */
+.reviewer-notification-dropdown {
+  position: absolute;
+  top: 55px;
+  right: 0;
+  width: 320px;
+  background: rgba(10, 10, 10, 0.98);
+  border: 1px solid rgba(0, 217, 255, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 217, 255, 0.1);
+  backdrop-filter: blur(20px);
+  overflow: hidden;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reviewer-notification-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 16px;
+  border-bottom: 1px solid rgba(0, 217, 255, 0.1);
+  background: rgba(0, 217, 255, 0.03);
+}
+
+.reviewer-notification-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.reviewer-close-notification {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  font-size: 18px;
+  transition: color 0.3s ease;
+}
+
+.reviewer-close-notification:hover {
+  color: #00d9ff;
+}
+
+.reviewer-notification-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.reviewer-notification-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.reviewer-notification-list::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.reviewer-notification-list::-webkit-scrollbar-thumb {
+  background: rgba(0, 217, 255, 0.3);
+  border-radius: 3px;
+}
+
+.reviewer-notification-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 217, 255, 0.5);
+}
+
+.reviewer-notification-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(0, 217, 255, 0.05);
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.reviewer-notification-item:hover {
+  background: rgba(0, 217, 255, 0.08);
+}
+
+.reviewer-notification-item:last-child {
+  border-bottom: none;
+}
+
+.reviewer-notification-dot {
+  width: 8px;
+  height: 8px;
+  background: #00d9ff;
+  border-radius: 50%;
+  margin-top: 6px;
+  flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(0, 217, 255, 0.5);
+}
+
+.reviewer-notification-content p {
+  color: #ffffff;
+  font-size: 13px;
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+
+.reviewer-notification-content span {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 12px;
+}
+
+.reviewer-view-all-notif {
+  width: 100%;
+  padding: 12px;
+  background: rgba(0, 217, 255, 0.08);
+  border: none;
+  color: #00d9ff;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border-top: 1px solid rgba(0, 217, 255, 0.1);
+  font-size: 13px;
+}
+
+.reviewer-view-all-notif:hover {
+  background: rgba(0, 217, 255, 0.15);
+}
+
+/* Profile Section */
+.reviewer-profile-wrapper {
+  position: relative;
+}
+
+.reviewer-profile-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(0, 217, 255, 0.08);
+  border: 1px solid rgba(0, 217, 255, 0.2);
+  color: #ffffff;
+  padding: 6px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.reviewer-profile-btn:hover {
+  background: rgba(0, 217, 255, 0.15);
+  border-color: rgba(0, 217, 255, 0.4);
+  box-shadow: 0 0 15px rgba(0, 217, 255, 0.2);
+}
+
+.reviewer-avatar {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #00d9ff 0%, #00b8d4 100%);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000000;
+  font-weight: 700;
+  font-size: 14px;
+  box-shadow: 0 2px 8px rgba(0, 217, 255, 0.3);
+}
+
+.reviewer-profile-name {
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.reviewer-chevron {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.3s ease;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.reviewer-chevron.open {
+  transform: rotate(180deg);
+}
+
+/* Profile Dropdown */
+.reviewer-profile-dropdown {
+  position: absolute;
+  top: 55px;
+  right: 0;
+  width: 220px;
+  background: rgba(10, 10, 10, 0.98);
+  border: 1px solid rgba(0, 217, 255, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 217, 255, 0.1);
+  backdrop-filter: blur(20px);
+  overflow: hidden;
+  animation: slideDown 0.3s ease;
+}
+
+.reviewer-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  font-weight: 500;
+}
+
+.reviewer-dropdown-item svg {
+  width: 18px;
+  height: 18px;
+  color: #00d9ff;
+  flex-shrink: 0;
+}
+
+.reviewer-dropdown-item:hover {
+  background: rgba(0, 217, 255, 0.1);
+  color: #00d9ff;
+}
+
+.reviewer-dropdown-item.logout {
+  color: #ff6b6b;
+}
+
+.reviewer-dropdown-item.logout svg {
+  color: #ff6b6b;
+}
+
+.reviewer-dropdown-item.logout:hover {
+  background: rgba(255, 107, 107, 0.1);
+  color: #ff6b6b;
+}
+
+.reviewer-dropdown-divider {
+  height: 1px;
+  border: none;
+  background: rgba(0, 217, 255, 0.1);
+  margin: 8px 0;
+}
+
+/* Mobile Menu Toggle */
+.reviewer-mobile-menu-btn {
+  display: none;
+  background: rgba(0, 217, 255, 0.08);
+  border: 1px solid rgba(0, 217, 255, 0.2);
+  color: #00d9ff;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.reviewer-mobile-menu-btn:hover {
+  background: rgba(0, 217, 255, 0.15);
+  border-color: rgba(0, 217, 255, 0.4);
+  box-shadow: 0 0 15px rgba(0, 217, 255, 0.2);
+}
+
+.reviewer-mobile-menu-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .reviewer-header-container {
+    height: 60px;
+    padding: 0 15px;
+  }
+
+  .reviewer-nav {
+    display: none;
+  }
+
+  .reviewer-brand h1 {
+    font-size: 16px;
+  }
+
+  .reviewer-brand span {
+    font-size: 10px;
+  }
+
+  .reviewer-mobile-menu-btn {
+    display: flex;
+  }
+
+  .reviewer-nav-link {
+    font-size: 13px;
+    gap: 15px;
+  }
+
+  .reviewer-notification-dropdown {
+    width: 280px;
+    right: -10px;
+  }
+
+  .reviewer-profile-dropdown {
+    width: 200px;
+    right: -10px;
+  }
+
+  .reviewer-profile-name {
+    display: none;
+  }
+
+  .reviewer-header-right {
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .reviewer-logo-section {
+    gap: 8px;
+    margin-right: 20px;
+  }
+
+  .reviewer-logo {
+    width: 36px;
+    height: 36px;
+  }
+
+  .reviewer-logo svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .reviewer-brand h1 {
+    font-size: 15px;
+  }
+
+  .reviewer-notification-btn,
+  .reviewer-mobile-menu-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .reviewer-profile-btn {
+    padding: 5px 10px;
+  }
+
+  .reviewer-avatar {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+}

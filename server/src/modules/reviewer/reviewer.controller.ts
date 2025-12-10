@@ -2,7 +2,8 @@ import { Request, Response } from "express";
 import ReviewerService from "./reviewer.service";
 import { uploadToCloudinary } from "../../middleware/cloudinaryUpload";
 import reviewerApplicationModel from "./reviewerApplication.model";
-import { compressImage } from "../../utils/compressImage";
+import { compressImage } from "../../core/utils/compressImage";
+import { success } from "zod";
 
 export default class ReviewerController {
   private reviewerService: ReviewerService;
@@ -107,12 +108,25 @@ export default class ReviewerController {
       data.resume_file = resumeUpload?.secure_url || null;
       data.education_certificate_file = eduUpload?.secure_url || null;
       data.experience_certificate_file = expUpload?.secure_url || null;
-
+      
       const result = await this.reviewerService.BecomeReviewerForm(data);
 
       return res.status(200).json({ success: true, result });
     } catch (error: any) {
       return res.status(400).json({
+        success: false,
+        message: error.message || "Internal server error",
+      });
+    }
+  }
+
+  async Login (req:Request,res:Response){
+    try {
+      const result = await this.reviewerService.LoginReviewer(req.body)
+      return res.status(200).json({success:true,result})
+    } catch (error:any) {
+      console.log('error while login',error)
+       return res.status(400).json({
         success: false,
         message: error.message || "Internal server error",
       });

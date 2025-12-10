@@ -1,5 +1,5 @@
 import React from "react";
-import Footer from "../../../components/layouts/Footer/Footer";
+import Footer from "../../../components/common/Footer/Footer";
 import HeroSection from "../HeroSection/HeroSection";
 import FeaturesSection from "../FeaturesSection/FeaturesSection";
 import CallToAction from "../CallToAction/CallToAction";

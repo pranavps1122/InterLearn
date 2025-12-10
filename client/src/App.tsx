@@ -1,69 +1,74 @@
+// src/App.tsx
+import React, { Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import routes, { AppRoute } from "./routes/RouteConfig";
 
-import Landing from "./pages/Landing/LandingPage/Landing";
-import Register from "./pages/Register/register";
-import VerifyOtp from "./pages/Verify-Otp/verify-otp";
-import Login from "./pages/Login/login";
-import BecomeReviewer from "./pages/BecomeReviewer/BecomeReviwer";
+// Toast
 import { ToastContainer, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "./toast.css";
-import MainLayout from "./components/layouts/Header/MainLayout";
-import PublicRoute from "./routes/PublicRoute";
+import "./toast.css"; // keep if you have custom toast styles
 
-const App = () => {
+const LoadingFallback = () => <div>Loading...</div>;
+
+function wrapWithLayout(
+  Layout: React.ComponentType<any> | undefined,
+  guard: ((node: React.ReactElement) => React.ReactElement) | undefined,
+  element: React.ReactElement | null
+): React.ReactElement | null {
+  if (!element) return null;
+  const guarded = guard ? guard(element) : element;
+  if (!Layout) return guarded;
+  return React.createElement(Layout, null, guarded);
+}
+
+export default function App() {
   return (
     <BrowserRouter>
-      <MainLayout>
+      <Suspense fallback={<LoadingFallback />}>
         <Routes>
+          {routes.map((r: AppRoute) => {
+            // If parent has children, render parent Route with a layout element
+            if (r.children?.length) {
+              const ParentLayout = r.layout;
+              const parentElement = r.element ?? <></>;
+              const parentNode = wrapWithLayout(ParentLayout, r.guard, parentElement);
 
-          {/* Public pages should redirect if user is logged in */}
-          <Route
-            path="/login"
-            element={
-              <PublicRoute>
-                <Login />
-              </PublicRoute>
+              return (
+                <Route key={r.path ?? "/"} path={r.path} element={parentNode}>
+                  {r.children!.map((child) => {
+                    const ChildLayout = child.layout;
+                    const childElement = child.element ?? <></>;
+                    const childNode = wrapWithLayout(ChildLayout, child.guard, childElement);
+
+                    if (child.index) {
+                      return <Route key={child.path ?? "index"} index element={childNode} />;
+                    }
+                    return <Route key={`${r.path}/${child.path}`} path={child.path} element={childNode} />;
+                  })}
+                </Route>
+              );
             }
-          />
 
-          <Route
-            path="/register"
-            element={
-              <PublicRoute>
-                <Register />
-              </PublicRoute>
-            }
-          />
-
-          <Route
-            path="/register/verify-otp"
-            element={
-              <PublicRoute>
-                <VerifyOtp />
-              </PublicRoute>
-            }
-          />
-
-          {/* Normal Routes */}
-          <Route path="/" element={<Landing />} />
-          <Route path="/become-reviewer" element={<BecomeReviewer />} />
-
+            // no children
+            const LayoutComp = r.layout;
+            const final = wrapWithLayout(LayoutComp, r.guard, r.element ?? <></>);
+            if (r.index) return <Route key={r.path ?? "index"} index element={final} />;
+            return <Route key={r.path ?? Math.random().toString()} path={r.path} element={final} />;
+          })}
         </Routes>
 
+        {/* ToastContainer: placed at root so all components can fire toasts */}
         <ToastContainer
           position="top-right"
           autoClose={2500}
           hideProgressBar={false}
-          closeOnClick={false}
+          closeOnClick
           pauseOnHover
           pauseOnFocusLoss
           draggable
           transition={Slide}
         />
-      </MainLayout>
+      </Suspense>
     </BrowserRouter>
   );
-};
-
-export default App;
+}

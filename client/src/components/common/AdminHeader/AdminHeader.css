@@ -1,0 +1,246 @@
+/* Admin Header Styles */
+
+.admin-header {
+  background: #1a1a1a;
+  border-bottom: 1px solid #333;
+  padding: 0;
+  height: 60px;
+  display: flex;
+  align-items: center;
+}
+
+.admin-header__wrapper {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  height: 100%;
+  gap: 24px;
+}
+
+/* Logo Section */
+.admin-header__logo-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  width: 180px;
+  background: #141414;
+  margin: -0 -24px 0 -24px;
+  padding: 0 24px;
+  height: 100%;
+}
+
+.admin-header__logo {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #0084ff;
+  border-radius: 4px;
+  color: #0084ff;
+  flex-shrink: 0;
+}
+
+.admin-header__logo svg {
+  width: 16px;
+  height: 16px;
+}
+
+.admin-header__brand {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.3px;
+}
+
+/* Title Section */
+.admin-header__title {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-header__title h1 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: 0.2px;
+}
+
+/* Right Section */
+.admin-header__right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+/* Profile Section */
+.admin-header__profile-wrapper {
+  position: relative;
+}
+
+.admin-header__profile-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 1px solid #333;
+  color: #a0a0a0;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.admin-header__profile-btn:hover {
+  border-color: #0084ff;
+  color: #0084ff;
+  background: rgba(0, 132, 255, 0.05);
+}
+
+.admin-header__avatar {
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, #0084ff 0%, #0066cc 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+.admin-header__profile-label {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .admin-header__profile-label {
+    display: inline;
+  }
+}
+
+/* Profile Dropdown */
+.admin-header__dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: #252525;
+  border: 1px solid #333;
+  border-radius: 6px;
+  width: 200px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  overflow: hidden;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.admin-header__dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  color: #a0a0a0;
+  text-decoration: none;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s ease;
+  width: 100%;
+  text-align: left;
+  font-weight: 500;
+}
+
+.admin-header__dropdown-item svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.admin-header__dropdown-item:hover {
+  background: rgba(0, 132, 255, 0.1);
+  color: #0084ff;
+}
+
+.admin-header__dropdown-item.logout {
+  color: #ff6b6b;
+}
+
+.admin-header__dropdown-item.logout:hover {
+  background: rgba(255, 107, 107, 0.1);
+  color: #ff8a8a;
+}
+
+.admin-header__divider {
+  height: 1px;
+  background: #333;
+  border: none;
+  margin: 6px 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .admin-header {
+    height: 56px;
+  }
+
+  .admin-header__wrapper {
+    padding: 0 16px;
+    gap: 16px;
+  }
+
+  .admin-header__logo-section {
+    width: 150px;
+    margin: -0 -16px 0 -16px;
+    padding: 0 16px;
+  }
+
+  .admin-header__logo {
+    width: 24px;
+    height: 24px;
+  }
+
+  .admin-header__logo svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .admin-header__brand {
+    font-size: 14px;
+  }
+
+  .admin-header__title h1 {
+    font-size: 16px;
+  }
+
+  .admin-header__profile-btn {
+    padding: 6px 10px;
+  }
+
+  .admin-header__dropdown {
+    right: -60px;
+  }
+}

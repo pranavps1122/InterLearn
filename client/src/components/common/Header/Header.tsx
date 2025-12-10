@@ -12,7 +12,8 @@ export default function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const user = useSelector((state: RootState) => state.auth.user);
+   const user = useSelector((state: RootState) => state.auth.user);
+  console.log('user logged',user)
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
