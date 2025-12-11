@@ -1,10 +1,11 @@
 import { RegisterDto } from "./auth.dto";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import OtpService from "./otp.service";
-import generateToken from "../../core/utils/generateToken";
+import {generateAccessToken,generateRefreshToken} from '@/core/utils'
 import otpModel from "./otp.model";
 import { OAuth2Client } from "google-auth-library";
-import { HttpError } from "@/core/errors/httpError";
+import { HttpError } from "@/core";
 import { UserRepository } from "./repository/user.repository";
 import { mapUserToDto } from "./mappers/user.mapper";
 
@@ -76,11 +77,10 @@ export default class AuthService {
       googleUser: false,
     } as any); 
 
-    const token = generateToken((created as any)._id.toString(), (created as any).role);
+   
 
     return {
       message: "Registration successful",
-      token,
       user: mapUserToDto(created as any),
     };
   }
@@ -137,15 +137,15 @@ export default class AuthService {
 
   async userLogin(data: { email: string; password: string }) {
     const { email, password } = data;
+    console.log('user data',data)
 
     if (!email || !password) {
       throw HttpError.BadRequest("All fields are required");
     }
 
-    // get a lean object for fast check
     const userLean = await userRepo.findByEmail(email);
     if (!userLean) {
-      // security-first: generic unauthorized, or use NotFound if desired
+     
       throw HttpError.Unauthorized("Invalid email or password");
     }
 
@@ -153,7 +153,6 @@ export default class AuthService {
       throw HttpError.BadRequest("Please login with Google");
     }
 
-    // fetch full doc with password for comparison
     const userDoc = await userRepo.findByEmailWithPassword(email);
     if (!userDoc || !userDoc.password) {
       throw HttpError.BadRequest("Please login with Google");
@@ -163,13 +162,22 @@ export default class AuthService {
     if (!isMatch) {
       throw HttpError.Unauthorized("Invalid email or password");
     }
+  
+        const accessToken = generateAccessToken({
+        id: userDoc._id.toString(),
+        role: userDoc.role,
+      });
 
-    const token = generateToken(userDoc._id.toString(), userDoc.role);
-
+      const refreshToken = generateRefreshToken({
+        id: userDoc._id.toString(),
+        role: userDoc.role,
+      });
+ 
     return {
       message: "Login successful",
-      token,
-      user: mapUserToDto(userLean as any),
+       accessToken,
+       refreshToken,
+       user: mapUserToDto(userLean as any),
     };
   }
 
@@ -202,12 +210,40 @@ export default class AuthService {
       user = created as any;
     }
 
-    const token = generateToken((user as any)._id.toString(), (user as any).role);
+    if(!user){
+      throw HttpError.BadRequest('User creation failed..')
+    }
+        const accessToken = generateAccessToken({
+        id: user._id.toString(),
+        role: user.role,
+      });
+
+        const refreshToken = generateRefreshToken({
+        id: user._id.toString(),
+        role: user.role,
+      });
 
     return {
       message: "Google login successful",
-      token,
+      accessToken,
+      refreshToken,
       user: mapUserToDto(user as any),
     };
   }
+
+  async refreshAccessToken(refreshToken: string) {
+    try {
+      const payload = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET!) as any;
+
+      const newAccessToken = generateAccessToken({
+        id: payload.id,
+        role: payload.role,
+      });
+
+      return newAccessToken;
+    } catch (err) {
+      throw HttpError.Unauthorized("Invalid refresh token");
+    }
+  }
+
 }

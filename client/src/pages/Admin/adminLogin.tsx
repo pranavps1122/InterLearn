@@ -20,7 +20,6 @@ export default function AdminLogin() {
     setIsLoading(true);
 
     try {
-      // Simulate API call
       if (!email || !password) {
         setError("Please fill in all fields");
         return;
@@ -42,7 +41,7 @@ export default function AdminLogin() {
         dispatch(
         adminLoginSuccess({
             admin: res.user,
-            token: res.token
+            accessToken: res.token
         })
         );
         navigate('/admin/reviewer-management');
