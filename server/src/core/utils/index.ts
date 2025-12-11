@@ -1,3 +1,3 @@
 export * from './compressImage'
-export * from './generateToken'
+export * from './tokens.util'
 export * from './response'

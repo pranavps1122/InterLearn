@@ -9,6 +9,18 @@ export default class AdminController {
     async AdminLogin(req:Request,res:Response){
         try {
             const result = await this.adminService.AdminPortalLogin(req.body)
+            console.log('admin backend',result)
+            const isProduction = process.env.NODE_ENV === "production";
+
+            res.cookie("refreshToken", result.refreshToken, {
+            httpOnly: true,
+            secure: isProduction,
+            sameSite: isProduction ? "strict" : "lax",
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+            });
+
+            const { refreshToken, ...safeResult } = result;
+
             return res.json({success:true,...result})
         } catch (error:any) {
             console.log("error while login admin",error.message)

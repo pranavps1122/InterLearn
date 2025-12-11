@@ -11,8 +11,9 @@ body {
   background-color: #001a33;
 }
 
-/* Original Classes */
-.otp-container {
+/* ==================== MAIN WRAPPER ==================== */
+.otp-wrapper {
+  width: 100%;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -24,7 +25,43 @@ body {
   overflow: hidden;
 }
 
-.otp-timer {
+/* ==================== BACKGROUND EFFECTS ==================== */
+.otp-wrapper::before {
+  content: '';
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(#050a0b, transparent 70%);
+  opacity: 0.15;
+  filter: blur(60px);
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.otp-bg-blur {
+  display: none;
+}
+
+.otp-blur-1,
+.otp-blur-2 {
+  display: none;
+}
+
+/* ==================== MAIN CONTENT CONTAINER ==================== */
+.otp-main {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ==================== TIMER BADGE ==================== */
+.otp-timer-badge {
   margin: 0 auto 30px;
   padding: 0;
   width: fit-content;
@@ -39,7 +76,7 @@ body {
   animation: fadeIn 0.4s ease-in-out;
 }
 
-.timer-icon {
+.otp-timer-svg {
   width: 24px;
   height: 24px;
   animation: spin 2s linear infinite;
@@ -65,23 +102,8 @@ body {
   }
 }
 
-.otp-container::before {
-  content: '';
-  position: absolute;
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(#050a0b, transparent 70%);
-  opacity: 0.15;
-  filter: blur(60px);
-  top: 10%;
-  left: 50%;
-  transform: translateX(-50%);
-  pointer-events: none;
-}
-
-.otp-card {
-  position: relative;
-  z-index: 1;
+/* ==================== CONTENT SECTION ==================== */
+.otp-content {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-top: 1px solid rgba(255, 255, 255, 0.2);
@@ -89,9 +111,14 @@ body {
   border-radius: 16px;
   padding: 35px 40px;
   width: 100%;
-  max-width: 380px;
   backdrop-filter: blur(20px);
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* ==================== HEADER SECTION ==================== */
+.otp-header {
+  text-align: center;
+  margin-bottom: 25px;
 }
 
 .otp-title {
@@ -103,7 +130,11 @@ body {
   text-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
 }
 
-.otp-title span {
+.otp-title-normal {
+  color: #ffffff;
+}
+
+.otp-title-accent {
   color: #00d9ff;
 }
 
@@ -112,60 +143,24 @@ body {
   font-size: 14px;
   font-weight: 300;
   color: rgba(255, 255, 255, 0.7);
-  margin-bottom: 25px;
+  margin: 0;
 }
 
-.otp-form {
+/* ==================== FORM SECTION ==================== */
+.otp-form-wrapper {
   display: flex;
   flex-direction: column;
   gap: 15px;
+  margin-bottom: 20px;
 }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+/* OTP Input Container */
+.otp-inputs-container {
+  display: contents;
 }
 
-.form-label {
-  font-size: 13px;
-  font-weight: 500;
-  color: #e0e0e0;
-}
-
-.form-input {
-  padding: 14px 18px;
-  font-size: 14px;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  outline: none;
-  color: #ffffff;
-  transition: 0.3s;
-}
-
-.form-input::placeholder {
-  color: rgba(255, 255, 255, 0.3);
-}
-
-.form-input:focus {
-  background: rgba(0, 0, 0, 0.4);
-  border-color: #00d9ff;
-  box-shadow: 0 0 15px rgba(0, 217, 255, 0.2);
-}
-
-.otp-input-group {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  margin-bottom: 10px;
-}
-
-.otp-input {
-  width: 50px;
-  height: 50px;
-  text-align: center;
-  font-size: 24px;
+.otp-input-field {
+  font-size: 18px;
   font-weight: 600;
   background: rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -173,24 +168,31 @@ body {
   outline: none;
   color: #ffffff;
   transition: 0.3s;
+  padding: 14px 18px;
+  width: 100%;
+  max-width: 380px;
+  letter-spacing: 8px;
+  text-align: left;
 }
 
-.otp-input::placeholder {
+.otp-input-field::placeholder {
   color: rgba(255, 255, 255, 0.3);
+  letter-spacing: 0;
 }
 
-.otp-input:focus {
+.otp-input-field:focus {
   background: rgba(0, 0, 0, 0.4);
   border-color: #00d9ff;
   box-shadow: 0 0 15px rgba(0, 217, 255, 0.2);
 }
 
-.otp-input:disabled {
+.otp-input-field:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-.submit-btn {
+/* Submit Button */
+.otp-submit-button {
   width: 100%;
   padding: 16px;
   font-size: 15px;
@@ -205,67 +207,98 @@ body {
   text-transform: uppercase;
   transition: 0.3s;
   box-shadow: 0 4px 15px rgba(0, 217, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+  overflow: hidden;
 }
 
-.submit-btn:hover:not(:disabled) {
+.otp-submit-button:hover:not(:disabled) {
   background: linear-gradient(135deg, #33e2ff, #00d9ff);
   transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 217, 255, 0.4);
 }
 
-.submit-btn:disabled {
+.otp-submit-button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-.submit-btn.loading {
+.otp-submit-button.otp-loading {
   position: relative;
   color: transparent;
 }
 
-.submit-btn.loading::after {
-  content: '';
-  position: absolute;
+.otp-spinner {
   width: 16px;
   height: 16px;
-  top: 50%;
-  left: 50%;
-  margin-left: -8px;
-  margin-top: -8px;
   border: 2px solid rgba(0, 26, 51, 0.3);
-  border-radius: 50%;
   border-top-color: #001a33;
+  border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
 
-.resend-section {
-  margin-top: 20px;
-  text-align: center;
-  font-size: 13px;
+.otp-submit-button.otp-loading .otp-spinner {
+  display: inline-block;
+}
+
+/* ==================== DIVIDER ==================== */
+.otp-divider {
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 5px;
-  flex-wrap: wrap;
+  gap: 12px;
+  margin: 20px 0;
+  opacity: 0.3;
 }
 
-.resend-text {
+.otp-divider-line {
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.otp-divider-text {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ==================== RESEND SECTION ==================== */
+.otp-resend-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.otp-resend-label {
+  font-size: 13px;
   color: rgba(255, 255, 255, 0.6);
+  font-weight: 400;
 }
 
-.resend-btn {
+.otp-resend-button {
   color: #00d9ff;
   font-weight: 500;
   cursor: pointer;
   position: relative;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   background: none;
   border: none;
   padding: 0;
   font: inherit;
   transition: 0.3s;
+  font-size: 13px;
 }
 
-.resend-btn::after {
+.otp-resend-button::after {
   content: '';
   position: absolute;
   width: 0;
@@ -276,33 +309,52 @@ body {
   transition: 0.3s;
 }
 
-.resend-btn:hover:not(:disabled)::after {
+.otp-resend-button:hover:not(:disabled)::after {
   width: 100%;
 }
 
-.resend-btn:disabled {
+.otp-resend-button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
+.otp-resend-timer {
+  color: #00d9ff;
+  font-weight: 500;
+}
+
+.otp-resend-text {
+  color: #00d9ff;
+  font-weight: 500;
+}
+
+.otp-resend-icon {
+  width: 14px;
+  height: 14px;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ==================== FOOTER ==================== */
 .otp-footer {
   margin-top: 25px;
   text-align: center;
   font-size: 13px;
 }
 
-.footer-row {
+.otp-footer-row {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 5px;
 }
 
-.footer-text {
+.otp-footer-text {
   color: rgba(255, 255, 255, 0.6);
 }
 
-.footer-link {
+.otp-footer-link {
   color: #00d9ff;
   font-weight: 500;
   cursor: pointer;
@@ -316,7 +368,7 @@ body {
   text-decoration: none;
 }
 
-.footer-link::after {
+.otp-footer-link::after {
   content: '';
   position: absolute;
   width: 0;
@@ -327,318 +379,39 @@ body {
   transition: 0.3s;
 }
 
-.footer-link:hover::after {
+.otp-footer-link:hover::after {
   width: 100%;
 }
 
-.copyright {
+/* ==================== COPYRIGHT ==================== */
+.otp-copyright {
   margin-top: 30px;
   font-size: 11px;
   color: rgba(255, 255, 255, 0.4);
-}
-
-/* NEW Auth Prefixed Classes */
-.auth-signup-container {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: radial-gradient(circle at top left, #131d24 0%, #001a33 60%, #000d1a 100%);
-  padding: 20px;
-  position: relative;
-  overflow: hidden;
-}
-
-.auth-otp-timer {
-  margin: 0 auto 30px;
-  padding: 0;
-  width: fit-content;
-  font-size: 24px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  color: #00d9ff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  animation: fadeIn 0.4s ease-in-out;
-}
-
-.auth-timer-icon {
-  width: 24px;
-  height: 24px;
-  animation: spin 2s linear infinite;
-}
-
-.auth-signup-container::before {
-  content: '';
-  position: absolute;
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(#050a0b, transparent 70%);
-  opacity: 0.15;
-  filter: blur(60px);
-  top: 10%;
-  left: 50%;
-  transform: translateX(-50%);
-  pointer-events: none;
-}
-
-.auth-signup-card {
-  position: relative;
-  z-index: 1;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
-  border-left: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 16px;
-  padding: 35px 40px;
-  width: 100%;
-  max-width: 380px;
-  backdrop-filter: blur(20px);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-}
-
-.auth-signup-title {
   text-align: center;
-  font-size: 30px;
-  font-weight: 600;
-  color: #ffffff;
-  margin-bottom: 8px;
-  text-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
 }
 
-.auth-signup-title span {
-  color: #00d9ff;
-}
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 640px) {
+  .otp-wrapper {
+    padding: 16px;
+  }
 
-.auth-signup-subtitle {
-  text-align: center;
-  font-size: 14px;
-  font-weight: 300;
-  color: rgba(255, 255, 255, 0.7);
-  margin-bottom: 25px;
-}
+  .otp-content {
+    padding: 30px 24px;
+  }
 
-.auth-signup-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
+  .otp-title {
+    font-size: 28px;
+  }
 
-.auth-form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
+  .otp-input-field {
+    width: 45px;
+    height: 45px;
+    font-size: 20px;
+  }
 
-.auth-form-label {
-  font-size: 13px;
-  font-weight: 500;
-  color: #e0e0e0;
-}
-
-.auth-form-input {
-  padding: 14px 18px;
-  font-size: 14px;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  outline: none;
-  color: #ffffff;
-  transition: 0.3s;
-}
-
-.auth-form-input::placeholder {
-  color: rgba(255, 255, 255, 0.3);
-}
-
-.auth-form-input:focus {
-  background: rgba(0, 0, 0, 0.4);
-  border-color: #00d9ff;
-  box-shadow: 0 0 15px rgba(0, 217, 255, 0.2);
-}
-
-.auth-otp-input-group {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  margin-bottom: 10px;
-}
-
-.auth-otp-input {
-  width: 50px;
-  height: 50px;
-  text-align: center;
-  font-size: 24px;
-  font-weight: 600;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  outline: none;
-  color: #ffffff;
-  transition: 0.3s;
-}
-
-.auth-otp-input::placeholder {
-  color: rgba(255, 255, 255, 0.3);
-}
-
-.auth-otp-input:focus {
-  background: rgba(0, 0, 0, 0.4);
-  border-color: #00d9ff;
-  box-shadow: 0 0 15px rgba(0, 217, 255, 0.2);
-}
-
-.auth-otp-input:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.auth-submit-btn {
-  width: 100%;
-  padding: 16px;
-  font-size: 15px;
-  font-weight: 600;
-  color: #001a33;
-  background: linear-gradient(135deg, #00d9ff, #00b8d4);
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  margin-top: 5px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  transition: 0.3s;
-  box-shadow: 0 4px 15px rgba(0, 217, 255, 0.3);
-}
-
-.auth-submit-btn:hover:not(:disabled) {
-  background: linear-gradient(135deg, #33e2ff, #00d9ff);
-  transform: translateY(-2px);
-}
-
-.auth-submit-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.auth-submit-btn.loading {
-  position: relative;
-  color: transparent;
-}
-
-.auth-submit-btn.loading::after {
-  content: '';
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  top: 50%;
-  left: 50%;
-  margin-left: -8px;
-  margin-top: -8px;
-  border: 2px solid rgba(0, 26, 51, 0.3);
-  border-radius: 50%;
-  border-top-color: #001a33;
-  animation: spin 0.8s linear infinite;
-}
-
-.auth-resend-section {
-  margin-top: 20px;
-  text-align: center;
-  font-size: 13px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-  flex-wrap: wrap;
-}
-
-.auth-resend-text {
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.auth-resend-btn {
-  color: #00d9ff;
-  font-weight: 500;
-  cursor: pointer;
-  position: relative;
-  display: inline-block;
-  background: none;
-  border: none;
-  padding: 0;
-  font: inherit;
-  transition: 0.3s;
-}
-
-.auth-resend-btn::after {
-  content: '';
-  position: absolute;
-  width: 0;
-  height: 1px;
-  bottom: -2px;
-  left: 0;
-  background-color: #00d9ff;
-  transition: 0.3s;
-}
-
-.auth-resend-btn:hover:not(:disabled)::after {
-  width: 100%;
-}
-
-.auth-resend-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.auth-signup-footer {
-  margin-top: 25px;
-  text-align: center;
-  font-size: 13px;
-}
-
-.auth-footer-row {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-}
-
-.auth-footer-text {
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.auth-footer-link {
-  color: #00d9ff;
-  font-weight: 500;
-  cursor: pointer;
-  position: relative;
-  display: inline-block;
-  background: none;
-  border: none;
-  padding: 0;
-  font: inherit;
-  transition: 0.3s;
-  text-decoration: none;
-}
-
-.auth-footer-link::after {
-  content: '';
-  position: absolute;
-  width: 0;
-  height: 1px;
-  bottom: -2px;
-  left: 0;
-  background-color: #00d9ff;
-  transition: 0.3s;
-}
-
-.auth-footer-link:hover::after {
-  width: 100%;
-}
-
-.auth-copyright {
-  margin-top: 30px;
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.4);
+  .otp-inputs-container {
+    gap: 8px;
+  }
 }

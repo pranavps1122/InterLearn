@@ -1,5 +1,6 @@
+// src/pages/auth/Login.tsx
 import { useState } from "react";
-import { useNavigate,Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { UserLogin, GoogleAuth } from "../../services/auth.service";
 import { GoogleLogin } from "@react-oauth/google";
 import { toast } from "react-toastify";
@@ -22,7 +23,7 @@ export default function Login() {
   });
 
   const [isLoading, setIsLoading] = useState(false);
-  const [showPassword,setShowPassword]=useState(true)
+  const [showPassword, setShowPassword] = useState(true);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,43 +31,60 @@ export default function Login() {
 
     try {
       const res = await UserLogin(form);
-      
-      console.log('user details',res.data.user);
-      console.log('user details',res.data.token);
-      toast.success(res.message);
+      const user = res?.user
+      const accessToken = res.accessToken 
+
+      if (!accessToken || !user) {
+        throw new Error("Invalid login response from server");
+      }
+
+      toast.success(res.message ?? "Logged in successfully");
 
       dispatch(
         loginSuccess({
-          user: res.data.user,
-          token: res.data.token,
+          user,
+          accessToken,
         })
       );
-      
+
       navigate("/");
     } catch (error: any) {
-      console.log("Login Error:", error.message);
-      toast.error(error.message || "Login Failed");
+      console.error("Login Error:", error);
+      toast.error(error?.response?.data?.message ?? error.message ?? "Login failed");
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleGoogleSignIn = async (credentialResponse: any) => {
-    const idToken = credentialResponse.credential;
-
+    setIsLoading(true);
     try {
+      const idToken = credentialResponse?.credential;
+      if (!idToken) throw new Error("Google token missing");
+
       const res = await GoogleAuth({ credential: idToken });
-      let user = res?.result?.user;
-      let token = res?.result?.token;
+      console.log('Google auth',res.data.user)
+      const user = res?.data.user
+      const accessToken = res.data.accessToken 
+
+      if (!accessToken || !user) {
+        throw new Error("Invalid Google login response");
+      }
 
       dispatch(
-        loginSuccess({ user, token })
+        loginSuccess({
+          user,
+          accessToken,
+        })
       );
 
       toast.success("Google Login Successful");
       navigate("/");
     } catch (err: any) {
-      toast.error("Google Login Failed");
+      console.error("Google login error:", err);
+      toast.error(err?.response?.data?.message ?? err.message ?? "Google Login Failed");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -79,7 +97,6 @@ export default function Login() {
 
         <p className="login-subtitle">Continue your journey with InterLearn</p>
 
-        {/* FORM */}
         <form className="login-form" onSubmit={handleSubmit}>
           <div className="form-group">
             <label className="form-label">Email</label>
@@ -97,21 +114,21 @@ export default function Login() {
           <div className="form-group">
             <label className="form-label">Password</label>
             <div className="password-wrapper">
-            <input
-              type={showPassword?'password':'text'}
-              className="form-input"
-              placeholder="Enter your password"
-              value={form.password}
-              onChange={(e) => setForm({ ...form, password: e.target.value })}
-              required
-              disabled={isLoading}
-              
-            />
-                   <button
+              <input
+                type={showPassword ? "password" : "text"}
+                className="form-input"
+                placeholder="Enter your password"
+                value={form.password}
+                onChange={(e) => setForm({ ...form, password: e.target.value })}
+                required
+                disabled={isLoading}
+              />
+              <button
                 type="button"
                 className="toggle-password-btn"
                 onClick={() => setShowPassword(!showPassword)}
                 tabIndex={-1}
+                aria-label={showPassword ? "Show password" : "Hide password"}
               >
                 {showPassword ? (
                   <svg className="eye-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -124,10 +141,8 @@ export default function Login() {
                   </svg>
                 )}
               </button>
-           </div>
-            
+            </div>
           </div>
-        
 
           <button
             type="submit"
@@ -138,47 +153,40 @@ export default function Login() {
           </button>
         </form>
 
-        {/* DIVIDER */}
         <div className="divider">
           <div className="divider-line"></div>
           <span className="divider-text">Or continue with</span>
           <div className="divider-line"></div>
         </div>
 
-        {/* GOOGLE LOGIN */}
         <div className="google-login-container">
           <GoogleLogin
             onSuccess={(credentialResponse) => {
-              console.log("GOOGLE RESPONSE:", credentialResponse);
               handleGoogleSignIn(credentialResponse);
             }}
             onError={() => {
               console.log("Google Login Failed");
+              toast.error("Google Login Failed");
             }}
           />
         </div>
 
-        {/* FORGOT PASSWORD */}
-            <div className="forgotPasswordContainer">
-        <Link to="/forgot-password" className="forgotPasswordLink">
-          Forgot Password
-        </Link>
-      </div>
+        <div className="forgotPasswordContainer">
+          <Link to="/forgot-password" className="forgotPasswordLink">
+            Forgot Password
+          </Link>
+        </div>
 
-
-        {/* FOOTER */}
         <div className="login-footer">
           <div className="footer-row">
             <span className="footer-text">Don't have an account?</span>
             <Link to="/register" className="footer-link">
-            Register
-          </Link>
+              Register
+            </Link>
           </div>
         </div>
 
-        <div className="copyright">
-          © 2024 InterLearn. All rights reserved.
-        </div>
+        <div className="copyright">© 2024 InterLearn. All rights reserved.</div>
       </div>
     </div>
   );

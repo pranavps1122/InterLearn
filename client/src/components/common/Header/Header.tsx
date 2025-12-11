@@ -15,13 +15,14 @@ export default function Header() {
    const user = useSelector((state: RootState) => state.auth.user);
   console.log('user logged',user)
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+  console.log('authUser',isAuthenticated)
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   const handleLogout = () => {
     dispatch(logout());
-    navigate("/login");
+    navigate("/");
   };
 
   const navLinks = [

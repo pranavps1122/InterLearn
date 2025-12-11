@@ -9,6 +9,10 @@ export class UserRepository extends BaseRepository<IUser> {
   async findByEmail(email: string) {
     return this.model.findOne({ email }).lean().exec();
   }
+  
+  async findAdminByEmail(email:string){
+    return this.model.findOne({email,role:'admin'}).lean().exec()
+  }
 
   async findByIdWithPassword(id: string) {
     

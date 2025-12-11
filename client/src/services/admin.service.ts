@@ -4,12 +4,13 @@ import api from "../api/axios"
 export async function AdminPortalLogin(email:string,password:string) {
     try {
         const data={email,password}
+        console.log(data)
         const response = await api.post('/admin/login',data)
-        console.log(response.data)
+        console.log('admin data',response.data)
         return response.data
        
     } catch (error:any) {
-        console.log(error)
+        console.log('Error while login with admin',error)
         
         throw new Error(error.response?.data?.message || "Login failed");
     }

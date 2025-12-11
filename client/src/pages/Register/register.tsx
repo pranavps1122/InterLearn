@@ -21,6 +21,7 @@ export default function Register() {
   });
   const [showPassword, setShowPassword] = useState(true)
   const [showConfirmPassword, setShowConfrimPassword] = useState(true)
+  const [submited,setSubmited]=useState(false)
 
   // Password validation checks
   const hasMinLength = form.password.length >= 8;
@@ -51,6 +52,7 @@ export default function Register() {
     }
 
     try {
+      setSubmited(true)
       const res = await requestOtp(form);
       toast.success(res.message);
       navigate("/register/verify-otp", {
@@ -179,14 +181,22 @@ export default function Register() {
               </li>
             </ul>
           </div>
-
-          <button 
-            type="submit" 
-            className="submit-btn"
-            disabled={!isPasswordValid || !passwordsMatch}
-          >
-            Register
-          </button>
+           
+           
+            <button
+              type="submit"
+              className="submit-btn"
+              disabled={!isPasswordValid || !passwordsMatch||submited}
+            >
+            {submited ? (
+          <div className="spinner"></div>
+        ) : (
+          "Register"
+        )}
+            </button>
+      
+         
+         
         </form>
 
         {/* Footer */}

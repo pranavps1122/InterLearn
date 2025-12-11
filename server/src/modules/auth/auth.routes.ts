@@ -29,6 +29,7 @@ authRoute.post(
   (req, res, next) => authController.googleLogin(req, res, next)
 );
 
+authRoute.get("/refresh-token", authController.refreshToken.bind(authController));
 
 authRoute.post(
   "/forgot-password",

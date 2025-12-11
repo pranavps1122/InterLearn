@@ -1,9 +1,13 @@
-import generateToken from '../../core/utils/generateToken';
 import reviewerApplicationModel from '../reviewer/reviewerApplication.model';
 import {transporter} from '../../config/email.config'
 import {interviewerApprovalEmailTemplate} from '../../templates/emailApproveTemplate'
+import {generateAccessToken,generateRefreshToken} from '@/core/utils'
 import UserModel from '../../modules/auth/auth.model'
+import { UserRepository } from "../auth/repository/user.repository";
 import bcrypt from "bcryptjs";
+
+const adminRepo = new UserRepository()
+
 export default class AdminService {
 
     async AdminPortalLogin(data:{email:string,password:string}){
@@ -12,7 +16,7 @@ export default class AdminService {
         if(!email||!password){
             throw new Error("Fill all fields")
         }
-        const admin = await UserModel.findOne({email})
+        const admin = await adminRepo.findAdminByEmail(email)
         console.log(admin)
         if(!admin){
             throw new Error('Admin not exist')
@@ -27,10 +31,18 @@ export default class AdminService {
         if(!isMatch){
             throw new Error('Password not matching')
         }
-        const token = generateToken(admin._id.toString(),admin.role)
+        const accessToken = generateAccessToken({
+            id:admin._id.toString(),
+            role:admin.role
+        })
+        const refreshToken = generateRefreshToken({
+            id:admin._id.toString(),
+            role:admin.role
+        })
         return {
             message:"Login Successful",
-            token,
+            accessToken,
+            refreshToken,
             user:{
                id:admin._id,
                email:admin.email,

@@ -22,6 +22,7 @@ export default function VerifyOtp() {
   const [isLoading, setIsLoading] = useState(false);
   const [isResending, setIsResending] = useState(false);
   const [resendTimer, setResendTimer] = useState(0);
+  const [timer,setTimer]=useState(30)
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   useEffect(() => {
@@ -30,29 +31,22 @@ export default function VerifyOtp() {
     }
   }, [email, navigate]);
 
-  useEffect(() => {
-    if (resendTimer > 0) {
-      const timer = setTimeout(() => setResendTimer(resendTimer - 1), 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [resendTimer]);
 
-  const handleOtpChange = (index: number, value: string) => {
-    if (value.length > 1) return;
+  useEffect(()=>{
+    if(timer>=1){
+      const counter = setInterval(()=>{
+        setTimer(prev=>prev-1)
+      },1000)
+      return ()=> clearInterval(counter)
+    }
     
-    const newOtp = form.otp.split("");
-    newOtp[index] = value;
-    setForm({ otp: newOtp.join("") });
+  },[timer])
 
-    if (value && index < 5) {
-      inputRefs.current[index + 1]?.focus();
-    }
-  };
+ 
 
-  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Backspace" && !form.otp[index] && index > 0) {
-      inputRefs.current[index - 1]?.focus();
-    }
+  const handleOtpChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/\D/g, '').slice(0, 6);
+    setForm({ otp: value });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -88,7 +82,7 @@ export default function VerifyOtp() {
     try {
       const res = await resendOtp({ email });
       toast.success(res.message || "OTP sent successfully");
-      setResendTimer(30);
+      setTimer(30)
       setForm({ otp: "" });
     } catch (error: any) {
       toast.error(error.response?.data?.message || "Failed to resend OTP");
@@ -98,77 +92,115 @@ export default function VerifyOtp() {
   };
 
   return (
-    <div className="auth-signup-container">
-   
+    <div className="otp-wrapper">
+      {/* Background elements */}
+      <div className="otp-bg-blur otp-blur-1"></div>
+      <div className="otp-bg-blur otp-blur-2"></div>
 
-      <div className="auth-signup-card">
-       <div className="auth-otp-timer">
-        <svg className="auth-timer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <circle cx="12" cy="12" r="10"></circle>
-          <polyline points="12 6 12 12 16 14"></polyline>
-        </svg>
-        <span>{resendTimer > 0 ? resendTimer : '30'}s</span>
-      </div>
-        <h2 className="auth-signup-title">Verify <span>OTP</span></h2>
+      {/* Main container */}
+      <div className="otp-main">
+        {/* Timer badge */}
+        <div className="otp-timer-badge">
+          <svg className="otp-timer-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <span className="otp-timer-value">{timer}</span>
+          <span className="otp-timer-label">s</span>
+        </div>
 
-        <p className="auth-signup-subtitle">
-          Enter the 6-digit code sent to your email
-        </p>
+        {/* Content section */}
+        <div className="otp-content">
+          {/* Header section */}
+          <div className="otp-header">
+            <h1 className="otp-title">
+              <span className="otp-title-normal">Verify</span>
+              <span className="otp-title-accent">OTP</span>
+            </h1>
+            <p className="otp-subtitle">Enter the 6-digit code sent to your email address</p>
+          </div>
 
-        <form onSubmit={handleSubmit} className="auth-signup-form">
-          <div className="auth-otp-input-group">
-            {[0, 1, 2, 3, 4, 5].map((index) => (
+          {/* Form section */}
+          <form onSubmit={handleSubmit} className="otp-form-wrapper">
+            {/* OTP Input Field */}
+            <div className="otp-inputs-container">
               <input
-                key={index}
                 ref={(el) => {
-                  inputRefs.current[index] = el;
+                  inputRefs.current[0] = el;
                 }}
                 type="text"
                 inputMode="numeric"
-                maxLength={1}
-                className="auth-otp-input"
-                placeholder="0"
-                value={form.otp[index] || ""}
-                onChange={(e) => handleOtpChange(index, e.target.value)}
-                onKeyDown={(e) => handleKeyDown(index, e)}
+                maxLength={6}
+                className="otp-input-field"
+                placeholder="000000"
+                value={form.otp}
+                onChange={handleOtpChange}
                 disabled={isLoading}
+                autoFocus
               />
-            ))}
+            </div>
+
+            {/* Verify Button */}
+            <button
+              type="submit"
+              className={`otp-submit-button ${isLoading ? 'otp-loading' : ''}`}
+              disabled={isLoading || form.otp.length !== 6}
+            >
+              {isLoading ? (
+                <>
+                  <span className="otp-spinner"></span>
+                  Verifying...
+                </>
+              ) : (
+                'Verify OTP'
+              )}
+            </button>
+          </form>
+
+          {/* Divider */}
+          <div className="otp-divider">
+            <span className="otp-divider-line"></span>
+            <span className="otp-divider-text">or</span>
+            <span className="otp-divider-line"></span>
           </div>
 
-          <button
-            type="submit"
-            className={`auth-submit-btn ${isLoading ? 'loading' : ''}`}
-            disabled={isLoading || form.otp.length !== 6}
-          >
-            {isLoading ? "Verifying..." : "Verify OTP"}
-          </button>
-        </form>
-
-        {/* Resend OTP Section */}
-        <div className="auth-resend-section">
-          <span className="auth-resend-text">Didn't receive the code?</span>
-          <button
-            type="button"
-            className="auth-resend-btn"
-            onClick={handleResendOtp}
-            disabled={isResending || resendTimer > 0}
-          >
-            {resendTimer > 0 ? `Resend in ${resendTimer}s` : "Resend OTP"}
-          </button>
-        </div>
-
-        {/* Footer */}
-        <div className="auth-signup-footer">
-          <div className="auth-footer-row">
-            <span className="auth-footer-text">Back to</span>
-            <a href="/login" className="auth-footer-link">Login</a>
+          {/* Resend Section */}
+          <div className="otp-resend-wrapper">
+            <p className="otp-resend-label">Didn't receive the code?</p>
+            <button
+              type="button"
+              className="otp-resend-button"
+              onClick={handleResendOtp}
+              disabled={isResending || timer > 0}
+            >
+              {timer > 0 ? (
+                <>
+                  <span className="otp-resend-timer">Resend in {timer}s</span>
+                </>
+              ) : (
+                <>
+                  <span className="otp-resend-text">Resend Code</span>
+                  <svg className="otp-resend-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <polyline points="23 4 23 10 17 10"></polyline>
+                    <path d="M20.49 15a9 9 0 1 1 .12-8.83"></path>
+                  </svg>
+                </>
+              )}
+            </button>
           </div>
+
+          {/* Footer */}
+          <div className="otp-footer">
+            <div className="otp-footer-row">
+              <span className="otp-footer-text">Already have account?</span>
+              <a href="/login" className="otp-footer-link">Back to Login</a>
+            </div>
+          </div>
+          <div className="otp-copyright">© 2024 InterLearn. All rights reserved.</div>
         </div>
 
-        <div className="auth-copyright">
-          © 2024 InterLearn. All rights reserved.
-        </div>
+        {/* Copyright */}
+        
       </div>
     </div>
   );

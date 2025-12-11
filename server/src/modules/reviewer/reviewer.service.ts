@@ -2,7 +2,7 @@ import reviewerApplication from "./reviewerApplication.model";
 import { IReviewerApplication } from "./reviewerApplication.interface";
 import UserModel from '../auth/auth.model'
 import bcrypt from "bcryptjs";
-import generateToken from "../../core/utils/generateToken";
+import generateToken from "../../core/utils/tokens.util";
 export default class ReviewerService {
   async BecomeReviewerForm(data: Partial<IReviewerApplication>) {
     const application = await reviewerApplication.create(data);

@@ -7,9 +7,10 @@ import type { RootState } from "../../store/store";
 interface Props { children: React.ReactElement; }
 
 export default function ReviewerPrivateRoute({ children }: Props) {
-  const reviewer = useSelector((state: RootState) => state.auth.user);
+  const user = useSelector((state: RootState) => state.auth.user);
+  console.log('user private',user)
   const location = useLocation();
-  if (!reviewer) {
+  if (!user) {
     return <Navigate to="/reviewer/login" replace state={{ from: location }} />;
   }
   return children;

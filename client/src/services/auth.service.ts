@@ -39,27 +39,71 @@ interface ResetPassword{
     
 }
 export async function requestOtp(data: RegisterInput) {
-    const response = await api.post("/auth/register/request-otp", data);
-    return response.data;
+    try {
+       const response = await api.post("/auth/register/request-otp", data);
+    return response.data; 
+    } catch (error) {
+        console.error('error while register',error)
+    }
+    
 }
 
 export async function OtpVerification(data: VerifyInput) {
+    try {
     const response = await api.post('/auth/register/verify', data);
     return response.data;
+    } catch (error:any) {
+       throw new Error(error.response?.data?.message || "Registration failed"); 
+    }
+    
 }
 export async function resendOtp(data:resendInput){
     const response = await api.post('/auth/register/resend-otp',data)
     return response.data
 }
 export async function UserLogin(data: LoginInput) {
-  try {
-    const response = await api.post('/auth/login', data);
-    console.log('user login response',response)
-    localStorage.setItem("token", response.data.token);
-    return response.data;
-  } catch (error: any) {
-    throw new Error(error.response?.data?.message || "Login failed");
+  console.log("[UserLogin] called with:", data);
 
+  try {
+    const response = await api.post("/auth/login", data);
+
+    const accessToken =
+      response?.data?.data?.accessToken ??
+      response?.data?.accessToken ??
+      response?.data?.token ??
+      null;
+
+    const user =
+      response?.data?.data?.user ??
+      response?.data?.user ??
+      null;
+
+    if (accessToken) {
+      localStorage.setItem("accessToken", accessToken);
+      console.log("[UserLogin] saved accessToken");
+    } else {
+      console.warn("[UserLogin] no accessToken in response", response?.data);
+    }
+
+    return {
+      message: response?.data?.message ?? "Login response",
+      user,
+      accessToken,
+      raw: response?.data,
+    };
+  } catch (error: any) {
+    
+    console.error("[UserLogin] error while login:", {
+      message: error.message,
+      code: error.code, // e.g. 'ERR_NETWORK'
+      requestSent: !!error.request,
+      status: error.response?.status ?? null,
+      responseData: error.response?.data ?? null,
+    });
+
+    throw new Error(
+      error.response?.data?.message || error.message || "Login failed"
+    );
   }
 }
 
@@ -92,16 +136,23 @@ export async function ResetForgotPassword(data:ResetPassword) {
 }
 
 export async function GoogleAuth(data: GoogleAuthInput) {
-    try {
-       const response = await api.post('/auth/google', data);
-    if (response.data.token) {
-        localStorage.setItem("token", response.data.token);
+  try {
+    const response = await api.post('/auth/google', data);
+
+    
+    const accessToken =
+      response?.data?.data?.accessToken ??
+      response?.data?.accessToken ??
+      response?.data?.token ??
+      null;
+
+    if (accessToken) {
+      localStorage.setItem("accessToken", accessToken); 
     }
 
-    return response.data; 
-    } catch (error:any) {
-        throw new Error(error.response?.data?.message || "Google Authentication failed");
-        
-    }
-    
+    return response.data;
+  } catch (error:any) {
+    throw new Error(error.response?.data?.message || "Google Authentication failed");
+  }
 }
+

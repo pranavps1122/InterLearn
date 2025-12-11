@@ -146,6 +146,9 @@ body {
   font-weight: 600;
   letter-spacing: 0.5px;
   color: #001021;
+  display:flex;
+  justify-content: center;
+  align-items: center;
   background: linear-gradient(135deg, #00d9ff, #0099ff);
   border: none;
   border-radius: 10px;
@@ -298,7 +301,24 @@ body {
   content: '✓';
   color: #00ffaa;
 }
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 3px solid #fff;
+  border-top: 3px solid transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  
+}
 
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
 /* Responsive Design */
 @media (max-width: 480px) {
   .register-card {

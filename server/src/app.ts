@@ -1,7 +1,8 @@
-// src/app.ts
+
 import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
 
 import authRoutes from "./modules/auth/auth.routes";
 import userRoutes from "./modules/user/user.route";
@@ -13,9 +14,22 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
+const CLIENT_URL = process.env.CLIENT_URL ?? "http://localhost:5173"; 
+
+
+app.use(cookieParser());
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(
+  cors({
+    origin: CLIENT_URL,
+    credentials: true, 
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "Accept"],
+  })
+);
 
 app.get("/health", (_req: Request, res: Response) => {
   res.json({ status: "OK", message: "Server Running" });
@@ -32,7 +46,6 @@ app.use((_req: Request, res: Response) => {
     message: "Route not found",
   });
 });
-
 
 app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
   console.error("🔥 Error:", err);
