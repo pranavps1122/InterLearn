@@ -39,11 +39,15 @@ interface ResetPassword{
     
 }
 export async function requestOtp(data: RegisterInput) {
+  console.log('data',data)
     try {
-       const response = await api.post("/auth/register/request-otp", data);
+    const response = await api.post("/auth/register/request-otp", data);
+
+ 
     return response.data; 
     } catch (error) {
-        console.error('error while register',error)
+      console.error(error)
+        throw error
     }
     
 }
@@ -61,51 +65,57 @@ export async function resendOtp(data:resendInput){
     const response = await api.post('/auth/register/resend-otp',data)
     return response.data
 }
-export async function UserLogin(data: LoginInput) {
-  console.log("[UserLogin] called with:", data);
 
+
+
+export async function login(data: LoginInput) {
+  const response = await api.post("/auth/login", data);
+
+  const accessToken = response?.data?.data?.accessToken;
+  const user = response?.data?.data?.user;
+
+  if (!accessToken || !user) {
+    throw new Error("Invalid login response");
+  }
+
+  localStorage.setItem('accessToken',accessToken)
+
+  return { user, accessToken };
+}
+
+export async function logoutService() {
+  await api.post("/auth/logout");
+}
+
+
+export async function AdminPortalLogin(data: LoginInput) {
+  const response = await api.post("/auth/admin/login", data);
+
+  const accessToken = response?.data?.data?.accessToken;
+  const user = response?.data?.data?.user;
+
+  if (!accessToken || !user) {
+    throw new Error("Invalid admin login response");
+  }
+
+ 
+  localStorage.setItem('accessToken',accessToken)
+
+  return { user, accessToken };
+}
+
+export const ReviewerPortalLogin = async (data:LoginInput)=>{
   try {
-    const response = await api.post("/auth/login", data);
-
-    const accessToken =
-      response?.data?.data?.accessToken ??
-      response?.data?.accessToken ??
-      response?.data?.token ??
-      null;
-
-    const user =
-      response?.data?.data?.user ??
-      response?.data?.user ??
-      null;
-
-    if (accessToken) {
-      localStorage.setItem("accessToken", accessToken);
-      console.log("[UserLogin] saved accessToken");
-    } else {
-      console.warn("[UserLogin] no accessToken in response", response?.data);
-    }
-
-    return {
-      message: response?.data?.message ?? "Login response",
-      user,
-      accessToken,
-      raw: response?.data,
-    };
-  } catch (error: any) {
-    
-    console.error("[UserLogin] error while login:", {
-      message: error.message,
-      code: error.code, // e.g. 'ERR_NETWORK'
-      requestSent: !!error.request,
-      status: error.response?.status ?? null,
-      responseData: error.response?.data ?? null,
-    });
-
-    throw new Error(
-      error.response?.data?.message || error.message || "Login failed"
-    );
+    const response = await api.post('/auth/reviewer/login',data)
+     const accessToken = response?.data?.data?.accessToken;
+     const user = response?.data?.data?.user;
+    return { user, accessToken };
+  } catch (error:any) {
+    console.log('Error while interviewer login',error)
+    throw new Error(error.response?.data?.message || "Login failed");
   }
 }
+
 
 export async function requestForgotPasswordOtp(data:requestForgotPassowrd) {
     try {
@@ -136,23 +146,19 @@ export async function ResetForgotPassword(data:ResetPassword) {
 }
 
 export async function GoogleAuth(data: GoogleAuthInput) {
-  try {
-    const response = await api.post('/auth/google', data);
+  const response = await api.post("/auth/google", data);
 
-    
-    const accessToken =
-      response?.data?.data?.accessToken ??
-      response?.data?.accessToken ??
-      response?.data?.token ??
-      null;
+  const accessToken = response?.data?.data?.accessToken;
+  const user = response?.data?.data?.user;
 
-    if (accessToken) {
-      localStorage.setItem("accessToken", accessToken); 
-    }
-
-    return response.data;
-  } catch (error:any) {
-    throw new Error(error.response?.data?.message || "Google Authentication failed");
+  if (!accessToken || !user) {
+    throw new Error("Invalid Google login response");
   }
+
+
+  localStorage.setItem("activeRole", user.role);
+  localStorage.setItem(`${user.role}_accessToken`, accessToken);
+
+  return { user, accessToken };
 }
 

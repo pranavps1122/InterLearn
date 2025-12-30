@@ -1,8 +1,4 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+
 
 /* Header Wrapper */
 .header {
@@ -242,6 +238,8 @@
   margin-left: 20px;
   object-fit: contain;
 }
+
+
 
 
 /* Optional: reduce logo on small screens */

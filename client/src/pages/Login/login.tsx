@@ -1,7 +1,7 @@
 // src/pages/auth/Login.tsx
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { UserLogin, GoogleAuth } from "../../services/auth.service";
+import { login, GoogleAuth } from "../../services/auth.service";
 import { GoogleLogin } from "@react-oauth/google";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
@@ -30,7 +30,7 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      const res = await UserLogin(form);
+      const res = await login(form);
       const user = res?.user
       const accessToken = res.accessToken 
 
@@ -38,7 +38,7 @@ export default function Login() {
         throw new Error("Invalid login response from server");
       }
 
-      toast.success(res.message ?? "Logged in successfully");
+      toast.success("Logged in successfully");
 
       dispatch(
         loginSuccess({
@@ -47,7 +47,7 @@ export default function Login() {
         })
       );
 
-      navigate("/");
+      navigate("/",{replace:true});
     } catch (error: any) {
       console.error("Login Error:", error);
       toast.error(error?.response?.data?.message ?? error.message ?? "Login failed");
@@ -63,9 +63,8 @@ export default function Login() {
       if (!idToken) throw new Error("Google token missing");
 
       const res = await GoogleAuth({ credential: idToken });
-      console.log('Google auth',res.data.user)
-      const user = res?.data.user
-      const accessToken = res.data.accessToken 
+      const user = res.user
+      const accessToken = res.accessToken 
 
       if (!accessToken || !user) {
         throw new Error("Invalid Google login response");

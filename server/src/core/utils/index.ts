@@ -1,3 +1,3 @@
 export * from './compressImage'
-export * from './tokens.util'
+export * from './jwt.util'
 export * from './response'

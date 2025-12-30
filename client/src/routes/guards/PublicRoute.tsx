@@ -1,14 +1,17 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
-import type { RootState } from "../../store/store";
+import { Navigate, useLocation } from "react-router-dom";
+import { useAuthStatus } from "@/core/hooks/useAuthStatus";
 
-interface Props { children: React.ReactElement; }
+export default function PublicRoute({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated, role, authChecked } = useAuthStatus();
 
-export default function PublicRoute({ children }: Props) {
-  const { isAuthenticated, token } = useSelector((state: RootState) => state.auth);
-  if (isAuthenticated || token) {
+
+  if (!authChecked) return null;
+
+  if (isAuthenticated) {
+    if (role === "admin") return <Navigate to="/admin/reviewer-management" replace />;
+    if (role === "reviewer") return <Navigate to="/reviewer/dashboard" replace />;
     return <Navigate to="/" replace />;
   }
-  return children;
+
+  return <>{children}</>;
 }

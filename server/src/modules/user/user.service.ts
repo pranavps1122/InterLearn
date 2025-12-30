@@ -1,4 +1,4 @@
-import UserModel  from '../auth/auth.model'
+import UserModel  from '../auth/models/auth.model'
 
 
 export default class UserService {

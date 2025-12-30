@@ -2,8 +2,8 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import { ReviewerPortalLogin } from "../../services/reviewer.service";
-import { reviewerLoginSuccess } from "../../store/reviewerSlice";
+import { ReviewerPortalLogin } from "@/services/auth.service";
+import { loginSuccess } from "../../store/authSlice";
 import "./ReviewerLogin.css";
 
 interface ReviewerLoginForm {
@@ -51,12 +51,13 @@ export default function ReviewerLogin() {
 
     try {
       const response = await ReviewerPortalLogin(form);
-      toast.success(response.message || "Login successful");
+      console.log(response)
+      toast.success("Login successful");
       
       dispatch(
-        reviewerLoginSuccess({
-          reviewer: response.user,
-          token: response.token
+        loginSuccess({
+          user: response.user,
+          accessToken: response.accessToken
         })
       );
 

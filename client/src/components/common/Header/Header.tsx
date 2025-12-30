@@ -1,29 +1,30 @@
 import React, { useState } from "react";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, Heading2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import "./Header.css";
 import Logo from "../../ui/Logo/Logo";
 
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../../store/authSlice";
+import { logout, logoutThunk } from "../../../store/authSlice";
 import type { RootState } from "../../../store/store";
+import { useAppDispatch } from "@/store/hooks";
+import { useAuthStatus } from "@/core/hooks/useAuthStatus";
 
 export default function Header() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
    const user = useSelector((state: RootState) => state.auth.user);
-  console.log('user logged',user)
-  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
-  console.log('authUser',isAuthenticated)
-
+  
+   const {isAuthenticated,role}=useAuthStatus()
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   const handleLogout = () => {
-    dispatch(logout());
+    dispatch(logoutThunk());
     navigate("/");
   };
+  
 
   const navLinks = [
     { name: "Home", to: "/" },
@@ -63,7 +64,7 @@ export default function Header() {
         </nav>
 
         <div className="auth-buttons">
-          {!isAuthenticated ? (
+          {!isAuthenticated ||role!=='student' ? (
             <>
               <button className="btn-login" onClick={() => navigate("/login")}>
                 Log in
@@ -87,7 +88,10 @@ export default function Header() {
                   <button onClick={handleLogout}>Logout</button>
                 </div>
               )}
+             
+             
             </div>
+            
           )}
         </div>
 

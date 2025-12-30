@@ -1,0 +1,796 @@
+/* ============================================
+   REVIEWER MODAL OVERLAY
+   ============================================ */
+
+.reviewer-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: reviewerFadeIn 0.2s ease-in-out;
+  backdrop-filter: blur(2px);
+}
+
+@keyframes reviewerFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   REVIEWER MODAL CONTENT
+   ============================================ */
+
+.reviewer-modal-content {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(22, 24, 27, 0.8) 100%);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 750px;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 
+              inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  animation: reviewerSlideUp 0.3s ease-out;
+}
+
+@keyframes reviewerSlideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   REVIEWER MODAL HEADER
+   ============================================ */
+
+.reviewer-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 28px;
+  border-bottom: 1px solid rgba(71, 85, 105, 0.5);
+  background: linear-gradient(180deg, rgba(59, 130, 246, 0.05) 0%, transparent 100%);
+}
+
+.reviewer-modal-header h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.reviewer-modal-close-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  border-radius: 6px;
+}
+
+.reviewer-modal-close-btn:hover {
+  color: var(--text-primary);
+  background: rgba(59, 130, 246, 0.1);
+}
+
+/* ============================================
+   REVIEWER MODAL BODY
+   ============================================ */
+
+.reviewer-modal-body {
+  padding: 28px;
+}
+
+/* ============================================
+   REVIEWER DETAILS SECTION
+   ============================================ */
+
+.reviewer-details-section {
+  margin-bottom: 32px;
+}
+
+.reviewer-detail-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+.reviewer-detail-row:last-child {
+  margin-bottom: 0;
+}
+
+.reviewer-detail-item {
+  display: flex;
+  flex-direction: column;
+  background: rgba(59, 130, 246, 0.05);
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(71, 85, 105, 0.3);
+  transition: all 0.2s ease;
+}
+
+.reviewer-detail-item:hover {
+  border-color: rgba(59, 130, 246, 0.5);
+  background: rgba(59, 130, 246, 0.08);
+}
+
+.reviewer-detail-item.reviewer-full-width {
+  grid-column: 1 / -1;
+}
+
+.reviewer-detail-item label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #60a5fa;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+
+.reviewer-detail-item p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0;
+  font-weight: 500;
+}
+
+/* ============================================
+   REVIEWER TAGS & LINKS
+   ============================================ */
+
+.reviewer-tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.reviewer-tag {
+  display: inline-block;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(168, 85, 247, 0.2) 100%);
+  color: #60a5fa;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  transition: all 0.2s ease;
+}
+
+.reviewer-tag:hover {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(168, 85, 247, 0.3) 100%);
+  border-color: #60a5fa;
+}
+
+.reviewer-links-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.reviewer-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(34, 197, 94, 0.05) 100%);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  border-radius: 8px;
+  color: #60a5fa;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reviewer-link-btn:hover {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.25) 0%, rgba(34, 197, 94, 0.15) 100%);
+  border-color: #60a5fa;
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   REVIEWER STATS SECTION
+   ============================================ */
+
+.reviewer-stats-section {
+  margin-bottom: 32px;
+  padding: 24px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(168, 85, 247, 0.05) 100%);
+  border: 1px solid rgba(71, 85, 105, 0.3);
+  border-radius: 12px;
+}
+
+.reviewer-stats-section h3 {
+  font-size: 13px;
+  font-weight: 700;
+  color: #60a5fa;
+  margin: 0 0 20px 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.reviewer-stats-grid-modal {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.reviewer-stat-item {
+  background: linear-gradient(135deg, rgba(15, 16, 19, 0.8) 0%, rgba(22, 24, 27, 0.6) 100%);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 10px;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.reviewer-stat-item:hover {
+  border-color: var(--accent-blue);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(168, 85, 247, 0.05) 100%);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.15);
+}
+
+.reviewer-stat-item .reviewer-stat-label {
+  font-size: 10px;
+  color: #94a3b8;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
+.reviewer-stat-item .reviewer-stat-value {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--accent-blue);
+}
+
+/* ============================================
+   REVIEWER STATUS SECTION
+   ============================================ */
+
+.reviewer-status-section {
+  margin-bottom: 32px;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  border-radius: 12px;
+}
+
+.reviewer-status-section h3 {
+  font-size: 13px;
+  font-weight: 700;
+  color: #86efac;
+  margin: 0 0 12px 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.reviewer-status-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.reviewer-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.reviewer-status-badge.reviewer-status-approved,
+.reviewer-status-approved {
+  background-color: rgba(34, 197, 94, 0.15);
+  color: #86efac;
+  border-color: rgba(34, 197, 94, 0.4);
+}
+
+.reviewer-status-badge.reviewer-status-rejected,
+.reviewer-status-rejected {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: #fca5a5;
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.reviewer-status-badge.reviewer-status-pending {
+  background-color: rgba(234, 179, 8, 0.15);
+  color: #fde047;
+  border-color: rgba(234, 179, 8, 0.4);
+}
+
+/* ============================================
+   REVIEWER IMAGES SECTION
+   ============================================ */
+
+.reviewer-images-section {
+  margin-bottom: 0;
+}
+
+.reviewer-images-section h3 {
+  font-size: 13px;
+  font-weight: 700;
+  color: #60a5fa;
+  margin: 0 0 20px 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.reviewer-image-container-wrapper {
+  margin-bottom: 24px;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(71, 85, 105, 0.1) 0%, transparent 100%);
+  border: 1px solid rgba(71, 85, 105, 0.3);
+  border-radius: 12px;
+}
+
+.reviewer-image-container-wrapper:last-child {
+  margin-bottom: 0;
+}
+
+.reviewer-image-container-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(71, 85, 105, 0.3);
+}
+
+.reviewer-image-container-header h4 {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.reviewer-image-count {
+  font-size: 11px;
+  color: #60a5fa;
+  font-weight: 600;
+  background: rgba(59, 130, 246, 0.1);
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.reviewer-images-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 12px;
+}
+
+.reviewer-image-thumbnail {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 10px;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, var(--bg-primary) 0%, rgba(22, 24, 27, 0.8) 100%);
+}
+
+.reviewer-image-thumbnail:hover {
+  border-color: var(--accent-blue);
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
+}
+
+.reviewer-image-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.reviewer-image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(59, 130, 246, 0.3) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.reviewer-image-thumbnail:hover .reviewer-image-overlay {
+  opacity: 1;
+}
+
+.reviewer-overlay-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+}
+
+.reviewer-image-overlay span {
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 12px;
+  padding: 6px 12px;
+  background: rgba(59, 130, 246, 0.8);
+  border-radius: 6px;
+  backdrop-filter: blur(4px);
+}
+
+/* ============================================
+   REVIEWER IMAGE MODAL
+   ============================================ */
+
+.reviewer-image-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.92);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  animation: reviewerFadeIn 0.2s ease-in-out;
+  backdrop-filter: blur(4px);
+}
+
+.reviewer-image-modal-content {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(22, 24, 27, 0.8) 100%);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 16px;
+  width: 95%;
+  max-width: 950px;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  animation: reviewerSlideUp 0.3s ease-out;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.7);
+}
+
+.reviewer-image-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 28px;
+  border-bottom: 1px solid rgba(71, 85, 105, 0.3);
+  background: linear-gradient(180deg, rgba(59, 130, 246, 0.08) 0%, transparent 100%);
+}
+
+.reviewer-image-modal-title {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.reviewer-image-modal-title h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.reviewer-image-counter {
+  font-size: 12px;
+  color: #60a5fa;
+  padding: 6px 12px;
+  background: rgba(59, 130, 246, 0.15);
+  border-radius: 6px;
+  font-weight: 600;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.reviewer-image-modal-close {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  border-radius: 6px;
+}
+
+.reviewer-image-modal-close:hover {
+  color: var(--text-primary);
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.reviewer-image-modal-body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 24px;
+  overflow: hidden;
+}
+
+.reviewer-image-display {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  max-height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.reviewer-image-display img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.reviewer-image-display embed {
+  border-radius: 8px;
+}
+
+.reviewer-nav-btn {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(168, 85, 247, 0.15) 100%);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  color: var(--text-primary);
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.reviewer-nav-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--accent-blue) 0%, #a78bfa 100%);
+  border-color: var(--accent-blue);
+  transform: scale(1.1);
+}
+
+.reviewer-nav-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.reviewer-image-modal-footer {
+  display: flex;
+  gap: 12px;
+  padding: 16px 28px;
+  border-top: 1px solid rgba(71, 85, 105, 0.3);
+  flex-wrap: wrap;
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.2) 100%);
+}
+
+.reviewer-type-btn {
+  padding: 8px 14px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, transparent 100%);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  color: var(--text-primary);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.reviewer-type-btn:hover {
+  border-color: var(--accent-blue);
+  background: rgba(59, 130, 246, 0.15);
+}
+
+.reviewer-type-btn.active {
+  background: linear-gradient(135deg, var(--accent-blue) 0%, #a78bfa 100%);
+  border-color: var(--accent-blue);
+  color: white;
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+}
+
+/* ============================================
+   REVIEWER MODAL FOOTER
+   ============================================ */
+
+.reviewer-modal-footer {
+  padding: 18px 28px;
+  
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  position: sticky;
+  bottom: 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.2) 100%);
+}
+
+.reviewer-btn-secondary {
+  padding: 10px 18px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, transparent 100%);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.reviewer-btn-secondary:hover {
+  background: linear-gradient(135deg, var(--accent-blue) 0%, #a78bfa 100%);
+  border-color: var(--accent-blue);
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   REVIEWER SCROLLBAR
+   ============================================ */
+
+.reviewer-modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.reviewer-modal-content::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: 4px;
+}
+
+.reviewer-modal-content::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+.reviewer-modal-content::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .reviewer-modal-content {
+    width: 95%;
+    max-width: 100%;
+    max-height: 90vh;
+    border-radius: 12px;
+  }
+
+  .reviewer-stats-grid-modal {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .reviewer-detail-row {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .reviewer-image-modal-content {
+    width: 98%;
+    height: 95vh;
+  }
+
+  .reviewer-image-modal-body {
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .reviewer-images-grid {
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  }
+
+  .reviewer-modal-header h2 {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .reviewer-modal-content {
+    width: 98%;
+    max-height: 95vh;
+    border-radius: 10px;
+  }
+
+  .reviewer-stats-grid-modal {
+    grid-template-columns: 1fr;
+  }
+
+  .reviewer-modal-header {
+    padding: 18px 20px;
+  }
+
+  .reviewer-modal-header h2 {
+    font-size: 18px;
+  }
+
+  .reviewer-modal-body {
+    padding: 20px;
+  }
+
+  .reviewer-detail-row {
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .reviewer-detail-item {
+    padding: 12px 14px;
+  }
+
+  .reviewer-image-modal-content {
+    width: 98%;
+    height: 98vh;
+    border-radius: 10px;
+  }
+
+  .reviewer-image-modal-body {
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+  }
+
+  .reviewer-nav-btn {
+    padding: 8px;
+  }
+
+  .reviewer-images-grid {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 10px;
+  }
+
+  .reviewer-image-container-header {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+
+  .reviewer-stat-item {
+    padding: 14px 10px;
+  }
+
+  .reviewer-stat-item .reviewer-stat-value {
+    font-size: 16px;
+  }
+}

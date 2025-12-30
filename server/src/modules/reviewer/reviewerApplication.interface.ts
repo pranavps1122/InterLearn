@@ -16,7 +16,7 @@ export interface IReviewerApplication extends Document {
 
   current_role: string;
   company_name?: string;
-
+  Rejected_Reason:string
   domains: string[];
   skills: {
     name: string;

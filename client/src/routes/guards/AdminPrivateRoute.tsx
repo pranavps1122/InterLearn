@@ -1,16 +1,16 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Navigate, useLocation } from "react-router-dom";
-import type { RootState } from "../../store/store";
+import { useAuthStatus } from "@/core/hooks/useAuthStatus";
 
 interface Props { children: React.ReactElement; }
 
 export default function AdminPrivateRoute({ children }: Props) {
-  const admin = useSelector((state: RootState) => state.admin.admin);
-  console.log('admin route',admin)
+ const {isAuthenticated,role} = useAuthStatus()
+
   const location = useLocation();
-  if (!admin) {
+  if (!isAuthenticated||role!=='admin') {
     return <Navigate to="/admin/login" replace state={{ from: location }} />;
   }
-  return children;
+  return <>{children}</>;
 }

@@ -69,7 +69,11 @@ export default function ConfirmModal({
           </div>
 
           <div className="modal-footer">
-            <button className="modal-btn cancel-btn" onClick={onCancel} disabled={isLoading}>
+            <button
+              className="modal-btn cancel-btn"
+              onClick={onCancel}
+              disabled={isLoading}
+            >
               {cancelText}
             </button>
 
