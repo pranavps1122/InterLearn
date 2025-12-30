@@ -59,7 +59,9 @@ export default function Register() {
         state: { email: form.email, name: form.name, password: form.password }
       });
     } catch (error: any) {
-      toast.error(error.response?.data?.message || "Something went wrong");
+      setSubmited(false)
+      let message = error.response.data.details.body[0]
+      toast.error(message || "Something went wrong");
     }
   };
 
@@ -96,7 +98,7 @@ export default function Register() {
               placeholder="Enter your email"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
-              required
+             
             />
           </div>
 

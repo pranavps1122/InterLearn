@@ -1,15 +1,18 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { Navigate, useLocation } from "react-router-dom";
-import type { RootState } from "../../store/store";
+import { Navigate } from "react-router-dom";
+import { useAuthStatus } from "@/core/hooks/useAuthStatus";
 
-interface Props { children: React.ReactElement; }
+export default function ReviewerPrivateRoute({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const { isAuthenticated, role, authChecked } = useAuthStatus();
 
-export default function ReviewerPrivateRoute({ children }: Props) {
-  const reviewer = useSelector((state: RootState) => state.reviewer.reviewer);
-  const location = useLocation();
-  if (!reviewer) {
-    return <Navigate to="/reviewer/login" replace state={{ from: location }} />;
-  }
-  return children;
+  if (!authChecked) return null;
+
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
+
+  if (role !== "reviewer") return <Navigate to="/" replace />;
+
+  return <>{children}</>;
 }

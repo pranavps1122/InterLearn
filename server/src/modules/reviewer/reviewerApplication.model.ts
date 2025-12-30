@@ -16,7 +16,7 @@ const ReviewerApplicationSchema = new Schema<IReviewerApplication>(
 
     current_role: String,
     company_name: String,
-
+    Rejected_Reason:String,
     domains: {
       type: [String],
       default: [],

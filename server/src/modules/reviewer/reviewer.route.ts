@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { upload } from "../../middleware/multer";
+import { upload } from "../../core/middleware/multer";
 import ReviewerController from "./reviewer.controller";
 
 const reviewerRoute = Router();
@@ -16,7 +16,7 @@ reviewerRoute.post(
 );
 
 reviewerRoute.post('/login',
-  (req,res)=>Reviewer.Login(req,res)
+  (req,res,next)=>Reviewer.Login(req,res,next)
 )
 
 export default reviewerRoute;

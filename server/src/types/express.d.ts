@@ -1,3 +1,4 @@
+import { ROLE } from "@/core/constants/roles";
 import { JwtPayload } from "jsonwebtoken";
 
 declare global {
@@ -5,7 +6,7 @@ declare global {
         interface Request{
             user?:{
                 id:string,
-                role:"user"|"reviewer"|"admin"
+                role:ROLE
             }
         }
     }

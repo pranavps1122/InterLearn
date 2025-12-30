@@ -1,8 +1,8 @@
 import reviewerApplication from "./reviewerApplication.model";
 import { IReviewerApplication } from "./reviewerApplication.interface";
-import UserModel from '../auth/auth.model'
+import UserModel from '../auth/models/auth.model'
 import bcrypt from "bcryptjs";
-import generateToken from "../../core/utils/tokens.util";
+import {generateAccessToken,generateRefreshToken} from '@/core/utils'
 export default class ReviewerService {
   async BecomeReviewerForm(data: Partial<IReviewerApplication>) {
     const application = await reviewerApplication.create(data);
@@ -43,9 +43,17 @@ export default class ReviewerService {
     if(reviewer.role!=='reviewer'){
       throw new Error('No reviewer account found')
     }
-      const token = generateToken(reviewer._id.toString(),reviewer.role)
+      const accessToken = generateAccessToken({
+        id:reviewer._id.toString(),
+        role:reviewer.role
+      })
+      const refreshToken = generateRefreshToken({
+        id:reviewer._id.toString(),
+        role:reviewer.role
+      })
         return {message:'Login Successfull',
-               token,
+               accessToken,
+               refreshToken,
                user:{
                 id:reviewer._id,
                 name:reviewer.name,

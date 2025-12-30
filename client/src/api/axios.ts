@@ -1,128 +1,88 @@
-
-import axios, {
-  AxiosError,
-  AxiosRequestConfig,
-  InternalAxiosRequestConfig,
-  AxiosResponse,
-} from "axios";
-
-const getAccessToken = () => localStorage.getItem("accessToken");
-const setAccessToken = (token: string | null) => {
-  if (token) localStorage.setItem("accessToken", token);
-  else localStorage.removeItem("accessToken");
-};
-const onRefreshFail = () => {
-  setAccessToken(null);
-  window.location.href = "/login";
-};
+import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:5000/api",
-  withCredentials: true, 
+  baseURL: import.meta.env.VITE_API_URL,
+  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
+const getAccessToken = () => localStorage.getItem("accessToken");
+
+const setAccessToken = (token: string | null) => {
+  if (token) localStorage.setItem("accessToken", token);
+  else localStorage.removeItem("accessToken");
+};
+
 api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   const token = getAccessToken();
-  if (!token) return config;
-
-  const headers = config.headers as any;
-  if (headers && typeof headers.set === "function") {
-    headers.set("Authorization", `Bearer ${token}`);
-  } else {
- 
-    (config.headers as Record<string, string | number | boolean>) = {
-      ...(config.headers as Record<string, string | number | boolean>),
-      Authorization: `Bearer ${token}`,
-    };
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
-
   return config;
 });
 
 let isRefreshing = false;
-type QueueItem = {
-  resolve: (value?: any) => void;
-  reject: (error?: any) => void;
-  config: InternalAxiosRequestConfig;
-};
-let failedQueue: QueueItem[] = [];
+let failedQueue: any[] = [];
 
 const processQueue = (error: any, token: string | null = null) => {
-  failedQueue.forEach(({ resolve, reject, config }) => {
-    if (error) {
-      reject(error);
-    } else {
- 
-      const headers = config.headers as any;
-      if (token) {
-        if (headers && typeof headers.set === "function") {
-          headers.set("Authorization", `Bearer ${token}`);
-        } else {
-          (config.headers as Record<string, string | number | boolean>) = {
-            ...(config.headers as Record<string, string | number | boolean>),
-            Authorization: `Bearer ${token}`,
-          };
-        }
-      }
-      resolve(api(config));
-    }
-  });
+  failedQueue.forEach(p =>
+    error ? p.reject(error) : p.resolve(token)
+  );
   failedQueue = [];
 };
-
 api.interceptors.response.use(
-  (response: AxiosResponse) => response,
-  (error: AxiosError & { config?: InternalAxiosRequestConfig }) => {
-    const originalRequest = error.config;
+  res => res,
+  async (error: AxiosError) => {
+    const originalRequest: any = error.config;
 
-    if (!originalRequest) return Promise.reject(error);
+  
+    if (originalRequest.url?.includes("/auth/refresh-token")) {
+      return Promise.reject(error);
+    }
 
    
-    if (error.response?.status !== 401) {
-      return Promise.reject(error);
-    }
-    if (originalRequest.url?.includes("/auth/refresh-token")) {
-      onRefreshFail();
+    const token = getAccessToken();
+    if (!token) {
       return Promise.reject(error);
     }
 
-    if ((originalRequest as any)._retry) {
-      return Promise.reject(error);
-    }
-
-    return new Promise((resolve, reject) => {
-      failedQueue.push({ resolve, reject, config: originalRequest });
-
-      if (!isRefreshing) {
-        isRefreshing = true;
-
-        api
-          .get("/auth/refresh-token")
-          .then((res) => {
-          
-            const newAccessToken =
-              (res.data && (res.data.accessToken ?? res.data.data?.accessToken)) || null;
-
-            if (!newAccessToken) {
-              throw new Error("No access token in refresh response");
-            }
-
-            setAccessToken(newAccessToken);
-            processQueue(null, newAccessToken);
-          })
-          .catch((refreshErr) => {
-            processQueue(refreshErr, null);
-            onRefreshFail();
-          })
-          .finally(() => {
-            isRefreshing = false;
-          });
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject });
+        }).then(token => {
+          originalRequest.headers.Authorization = `Bearer ${token}`;
+          return api(originalRequest);
+        });
       }
-    });
+
+      originalRequest._retry = true;
+      isRefreshing = true;
+
+      try {
+        const res = await api.post("/auth/refresh-token");
+        const newToken = res.data.data.accessToken;
+
+        setAccessToken(newToken);
+        processQueue(null, newToken);
+
+        originalRequest.headers.Authorization = `Bearer ${newToken}`;
+        return api(originalRequest);
+      } catch (err) {
+        processQueue(err, null);
+        setAccessToken(null);
+        window.location.href = "/login";
+        return Promise.reject(err);
+      } finally {
+        isRefreshing = false;
+      }
+    }
+
+    return Promise.reject(error);
   }
 );
+
 
 export default api;

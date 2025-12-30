@@ -1,23 +1,37 @@
-/* =============== ADMIN LAYOUT FIX =============== */
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+}
 
 .admin-layout-container {
   display: flex;
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
-  overflow: hidden;
+  overflow: clip;
+}
+
+.admin-sidebar {
+  width: 260px;
+  flex: 0 0 260px;
+  transform: translateZ(0);
+  will-change: transform;
+  box-sizing: border-box;
+  font-size: 14px;
+  line-height: 1.4;
 }
 
 .admin-main-content {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background: #0f1013;
-  overflow: hidden;
 }
 
 .admin-outlet {
   flex: 1;
   overflow-y: auto;
-  padding: 24px;
-  background: #0f1013;
 }

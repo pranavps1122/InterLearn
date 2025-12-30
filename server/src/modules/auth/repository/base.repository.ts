@@ -6,6 +6,7 @@ export class BaseRepository<T extends Document> implements IRepository<T> {
 
   constructor(model: Model<T>) {
     this.model = model;
+    
   }
 
   async create(data: Partial<T>): Promise<T> {

@@ -1,9 +1,10 @@
-import { Request, Response } from "express";
+import { Request, Response ,NextFunction} from "express";
 import ReviewerService from "./reviewer.service";
-import { uploadToCloudinary } from "../../middleware/cloudinaryUpload";
-import reviewerApplicationModel from "./reviewerApplication.model";
+import { uploadToCloudinary } from "../../core/middleware/cloudinaryUpload";
+import reviewerApplicationModel from "../reviewer/reviewerApplication.model";
 import { compressImage } from "../../core/utils/compressImage";
-import { success } from "zod";
+import { SuccessResponse } from "@/core/utils/response";
+import { HTTP_STATUS } from "@/core/constants/httpStatus";
 
 export default class ReviewerController {
   private reviewerService: ReviewerService;
@@ -120,16 +121,30 @@ export default class ReviewerController {
     }
   }
 
-  async Login (req:Request,res:Response){
+  async Login (req:Request,res:Response,next: NextFunction){
     try {
       const result = await this.reviewerService.LoginReviewer(req.body)
-      return res.status(200).json({success:true,result})
-    } catch (error:any) {
-      console.log('error while login',error)
-       return res.status(400).json({
-        success: false,
-        message: error.message || "Internal server error",
-      });
+
+     const isProduction = process.env.NODE_ENV === "production";
+
+     res.cookie('refreshToken',result.refreshToken,{
+        httpOnly:true,
+        secure:isProduction,
+        sameSite: isProduction ? "strict" : "lax",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+     })
+
+     const {refreshToken,...safeResult} = result
+
+      return res.status(HTTP_STATUS.OK)
+      .json(
+        SuccessResponse(safeResult.message,{
+          accessToken:safeResult.accessToken,
+          user:safeResult.user
+        },HTTP_STATUS.OK)
+      )
+    } catch (err) {
+      return next(err);
     }
   }
 }

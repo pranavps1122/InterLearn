@@ -1,5 +1,6 @@
 import { BaseRepository } from "./base.repository";
-import UserModel, { IUser } from "../auth.model"
+import UserModel from "../models/auth.model"
+import { IUser } from "../types/auth.interface";
 import { FilterQuery } from "mongoose";
 export class UserRepository extends BaseRepository<IUser> {
   constructor() {

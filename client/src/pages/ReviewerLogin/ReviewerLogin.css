@@ -94,7 +94,7 @@ body {
 .reviewer-login-form {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 25px;
 }
 
 .reviewer-form-group {
@@ -113,14 +113,15 @@ body {
 
 /* Input Fields */
 .reviewer-form-input {
+    width: 100%;
   padding: 14px 18px;
   font-size: 14px;
-  background: rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 10px;
   outline: none;
   color: #ffffff;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
 }
 
 .reviewer-form-input::placeholder {

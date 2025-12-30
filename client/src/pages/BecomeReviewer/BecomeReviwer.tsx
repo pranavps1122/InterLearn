@@ -49,14 +49,14 @@ const BecomeReviewer: React.FC = () => {
   ];
 
   const stepIcons = [
-    <User size={20} />,
-    <Briefcase size={20} />,
-    <Globe size={20} />,
-    <Pencil size={20} />,
-    <Layers size={20} />,
-    <FileText size={20} />,
-    <Upload size={20} />,
-    <CheckCircle size={20} />
+    <User key="user" size={20} />,
+    <Briefcase key="briefcase" size={20} />,
+    <Globe key="globe" size={20} />,
+    <Pencil key="pencil" size={20} />,
+    <Layers key="layers" size={20} />,
+    <FileText key="filetext" size={20} />,
+    <Upload key="upload" size={20} />,
+    <CheckCircle key="checkcircle" size={20} />
   ];
 
   const validateStep = () => {
@@ -93,22 +93,23 @@ const BecomeReviewer: React.FC = () => {
   };
 
   const forms = [
-    <PersonalInfo formData={formData} setFormData={setFormData} errors={errors} setErrors={setErrors} />,
-    <ProfessionalInfo formData={formData} setFormData={setFormData} errors={errors} setErrors={setErrors} />,
-    <OnlinePresence formData={formData} setFormData={setFormData} />,
-    <Motivation formData={formData} setFormData={setFormData} errors={errors} />,
-    <DomainSkills formData={formData} setFormData={setFormData} errors={errors} />,
-    <AdditionalInfo formData={formData} setFormData={setFormData} />,
-    <FileUploads formData={formData} setFormData={setFormData} errors={errors} />,
+    <PersonalInfo key="personal" formData={formData} setFormData={setFormData} errors={errors} setErrors={setErrors} />,
+    <ProfessionalInfo key="professional" formData={formData} setFormData={setFormData} errors={errors} setErrors={setErrors} />,
+    <OnlinePresence key="online" formData={formData} setFormData={setFormData} />,
+    <Motivation key="motivation" formData={formData} setFormData={setFormData} errors={errors} />,
+    <DomainSkills key="skills" formData={formData} setFormData={setFormData} errors={errors} />,
+    <AdditionalInfo key="additional" formData={formData} setFormData={setFormData} />,
+    <FileUploads key="files" formData={formData} setFormData={setFormData} errors={errors} />,
     <SubmitButtons
+      key="submit"
       formData={formData}
       setFormData={setFormData}
       errors={errors}
       setErrors={setErrors}
       submitted={submitted}
       setSubmitted={setSubmitted}
-       currentStep={step}          
-      setCurrentStep={setStep}    
+      currentStep={step}
+      setCurrentStep={setStep}
     />
   ];
 

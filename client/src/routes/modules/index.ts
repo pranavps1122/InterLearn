@@ -1,3 +1,5 @@
-export { default as UserRoutes } from "./User.routes";
-export { default as AdminRoutes } from "./Admin.routes";
-export { default as ReviewerRoutes } from "./Reviewer.routes";
+export { default as routes } from "../RouteConfig";
+
+// expose helpers
+export * from "../guards";
+export * from "../route.types";
